@@ -18,3 +18,15 @@ table), and the APP WALL render itself with its zoning crop, reference
 photo, and full SKU list by wall bay. Same self-contained/offline-first
 page as everything else here — just one file, no assets to fetch.
 
+## Karina FW26 — mannequin outfit & VP table setup guideline
+
+| File | Live |
+|---|---|
+| `karina-mnq-vp-setup.html` | [view](https://fnf-hongkong.github.io/VMD-sharing-/karina-mnq-vp-setup.html) |
+
+Same tabbed dashboard as above, forked from it, with the APP WALL part
+removed — each store's card now carries just 2 parts: Mannequin Outfit
+and VP Table Setting. Built as its own guideline for updating outfit
+coordinations/VP setups without touching the original APP wall
+reference above.
+
