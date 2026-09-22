@@ -22,7 +22,7 @@ page as everything else here — just one file, no assets to fetch.
 
 | File | Live |
 |---|---|
-| `karina-mnq-vp-setup.html` | [view](https://fnf-hongkong.github.io/VMD-sharing-/karina-mnq-vp-setup.html) |
+| `Sep-2nd-mnq-vp-guideline.html` | [view](https://fnf-hongkong.github.io/VMD-sharing-/Sep-2nd-mnq-vp-guideline.html) |
 
 Same tabbed dashboard as above, forked from it, with the APP WALL part
 removed — each store's card now carries just 2 parts: Mannequin Outfit
