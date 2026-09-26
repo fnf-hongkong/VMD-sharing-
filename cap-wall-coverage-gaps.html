@@ -1,0 +1,230 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Cap Wall Coverage Gaps</title>
+<style>
+  :root{
+    color-scheme:light;
+    --paper:#eef1f7; --surface:#ffffff; --ink:#12172a; --muted:#65708a; --hairline:#d7deec;
+    --blue:#2f5fe0;
+    --dom-meow:#a85a2e; --dom-other:#5b6472; --dom-cp:#1f7a6c; --dom-street:#2f5fe0;
+    --dom-structured:#c1507a; --dom-vintage:#8a6d23;
+    --pop:5px 5px 0 var(--ink);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#0f1320; --surface:#171c2c; --ink:#eef1f7; --muted:#8a93ad; --hairline:#2a3150;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#0f1320; --surface:#171c2c; --ink:#eef1f7; --muted:#8a93ad; --hairline:#2a3150;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;background:var(--paper);}
+  body{color:var(--ink);font:400 14px/1.5 "Source Sans 3",-apple-system,"Segoe UI",sans-serif;padding:0 16px;}
+  h1,h2,h3{font-family:"Archivo",-apple-system,sans-serif;margin:0;color:var(--ink);}
+  .wrap{max-width:1200px;margin:0 auto;padding:28px 0 60px;}
+
+  .head{background:var(--ink);color:var(--paper);padding:26px 26px 22px;border:2px solid var(--ink);box-shadow:var(--pop);}
+  .eyebrow{display:block;font:700 11px/1 "IBM Plex Mono",monospace;letter-spacing:.16em;text-transform:uppercase;color:#8fa4ff;margin-bottom:10px;}
+  .head h1{font-size:32px;font-weight:900;letter-spacing:-.01em;text-transform:uppercase;color:var(--paper);}
+  .head p{margin:10px 0 0;color:rgba(238,241,247,.72);font-size:13px;max-width:64ch;}
+  .head-stats{display:flex;gap:22px;margin-top:18px;flex-wrap:wrap;}
+  .stat{display:flex;flex-direction:column;gap:2px;}
+  .stat b{font:900 26px "Archivo",sans-serif;color:#fff;line-height:1;}
+  .stat span{font:600 10px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:rgba(238,241,247,.6);}
+
+  .bars{background:var(--surface);border:2px solid var(--ink);border-top:none;padding:18px 22px 20px;}
+  .bars h2{font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;}
+  .bar-row{display:flex;align-items:center;gap:10px;margin-bottom:6px;cursor:pointer;}
+  .bar-row .lbl{width:34px;flex-shrink:0;font:700 11px "IBM Plex Mono",monospace;}
+  .bar-row .track{flex:1;background:var(--paper);border-radius:3px;height:16px;overflow:hidden;}
+  .bar-row .fill{height:100%;background:var(--blue);border-radius:3px;transition:filter .12s;}
+  .bar-row:hover .fill{filter:brightness(1.15);}
+  .bar-row .n{width:26px;text-align:right;font:700 11px "IBM Plex Mono",monospace;color:var(--muted);flex-shrink:0;}
+  .bar-row.active .fill{background:#ff8a3d;}
+
+  .legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--hairline);}
+  .leg-chip{display:flex;align-items:center;gap:6px;font:700 10px "IBM Plex Mono",monospace;letter-spacing:.04em;text-transform:uppercase;padding:5px 9px;border-radius:20px;border:1px solid var(--hairline);cursor:pointer;background:var(--paper);color:var(--muted);}
+  .leg-chip .sw{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+  .leg-chip.active{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+  .leg-chip .sw{background:var(--c);}
+
+  .controls{display:flex;gap:10px;align-items:center;margin:20px 0 14px;flex-wrap:wrap;}
+  .search{flex:1;min-width:200px;padding:10px 14px;border:1px solid var(--hairline);border-radius:8px;background:var(--surface);color:var(--ink);font:inherit;}
+  .search:focus{outline:2px solid var(--blue);outline-offset:-1px;}
+  .clear-btn{font:600 12px "IBM Plex Mono",monospace;letter-spacing:.04em;text-transform:uppercase;padding:9px 14px;border-radius:8px;border:1px solid var(--hairline);background:var(--surface);color:var(--muted);cursor:pointer;}
+  .clear-btn:hover{color:var(--ink);border-color:var(--ink);}
+
+  .store-card{background:var(--surface);border:2px solid var(--ink);box-shadow:var(--pop);margin-bottom:18px;}
+  .store-card summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--ink);}
+  .store-card summary::-webkit-details-marker{display:none;}
+  .store-card summary .sname{color:#fff;font:900 16px "Archivo",sans-serif;text-transform:uppercase;letter-spacing:-.01em;}
+  .store-card summary .scode{font:700 10px "IBM Plex Mono",monospace;color:#8fa4ff;letter-spacing:.06em;margin-right:8px;}
+  .store-card summary .scount{font:700 11px "IBM Plex Mono",monospace;color:rgba(238,241,247,.75);background:rgba(255,255,255,.12);padding:4px 10px;border-radius:20px;}
+  .store-card summary .chev{color:rgba(238,241,247,.55);transition:transform .15s;font-size:12px;}
+  .store-card[open] summary .chev{transform:rotate(90deg);}
+  .gap-table{width:100%;border-collapse:collapse;font-size:12.5px;}
+  .gap-table th{text-align:left;font:700 10px "IBM Plex Mono",monospace;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding:9px 14px;border-bottom:1px solid var(--hairline);position:sticky;top:0;background:var(--surface);}
+  .gap-table td{padding:9px 14px;border-bottom:1px solid var(--hairline);vertical-align:middle;}
+  .gap-table tr:last-child td{border-bottom:none;}
+  .dom-badge{display:inline-flex;align-items:center;gap:5px;font:700 9.5px "IBM Plex Mono",monospace;letter-spacing:.03em;text-transform:uppercase;color:#fff;padding:3px 8px;border-radius:20px;white-space:nowrap;}
+  .style-name{color:var(--muted);font-size:11.5px;}
+  .qty{font:700 13px "IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;}
+  .qty-bar{display:inline-block;height:6px;background:var(--blue);border-radius:3px;vertical-align:middle;margin-left:8px;}
+  .mono{font:600 11.5px "IBM Plex Mono",monospace;color:var(--muted);}
+  .empty-note{padding:30px;text-align:center;color:var(--muted);font-size:13px;}
+
+  .foot{margin-top:8px;font:600 10px "IBM Plex Mono",monospace;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-align:center;}
+
+  @media (max-width:640px){
+    .head h1{font-size:24px;}
+    .gap-table th:nth-child(4), .gap-table td:nth-child(4){display:none;}
+  }
+</style>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600;700&display=swap" rel="stylesheet">
+
+<div class="wrap">
+  <header class="head">
+    <span class="eyebrow">MLB &middot; Cap Wall &middot; HK &amp; Macau</span>
+    <h1>Coverage Gaps</h1>
+    <p>Real-stock colourways currently NOT shown anywhere on each store's wall, across every tracked domain (Meow/Other Beanies, CP66+CP77, Street/Structured, Vintage+Feminine). Computed by re-running this store's actual saved layout (or the live algorithm baseline for stores/domains with no saved arrangement yet) against current SOH — a gap here means real, sellable stock with nowhere on the wall to show it, not a data error.</p>
+    <div class="head-stats">
+      <div class="stat"><b id="statTotal">—</b><span>total gaps</span></div>
+      <div class="stat"><b id="statStores">14</b><span>stores</span></div>
+      <div class="stat"><b id="statDomains">6</b><span>domains affected</span></div>
+    </div>
+  </header>
+
+  <div class="bars">
+    <h2>Gaps per store — click a bar to jump</h2>
+    <div id="barChart"></div>
+    <div class="legend" id="domainLegend"></div>
+  </div>
+
+  <div class="controls">
+    <input type="text" class="search" id="searchBox" placeholder="Search style code, style name, or colour...">
+    <button class="clear-btn" id="clearBtn" type="button">Clear filters</button>
+  </div>
+
+  <div id="storeList"></div>
+
+  <div class="foot">Snapshot 2026&#8209;09&#8209;26 &middot; source: live grid_arrangement + STOCK from Cap Wall Domain Plan &middot; all 14 stores hand-arranged</div>
+</div>
+
+<script>
+var REPORT = {"M01":[{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"43RDD","colorName":"RED","qty":17},{"domain":"vintage_feminine","styleCode":"3ACPVV14N","styleName":"BASIC WASHING UNSTRUCTURED BALL CAP","color":"50NYS","colorName":"NAVY","qty":15},{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"50CGS","colorName":"GRAY","qty":11},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"07BLS","colorName":"BLUE","qty":10},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50LDP","colorName":"PURPLE","qty":9},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BKS","colorName":"BLACK","qty":9},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BGS","colorName":"BEIGE","qty":7},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50ORL","colorName":"ORANGE","qty":6},{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"07INS","colorName":"NAVY","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPV325N","styleName":"JELLY COLOR BLOCK  UNSTRUCTURED BALLCAP","color":"07NYL","colorName":"NAVY","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPV325N","styleName":"JELLY COLOR BLOCK  UNSTRUCTURED BALLCAP","color":"07MAL","colorName":"PURPLE","qty":2},{"domain":"street","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"07NYS","colorName":"NAVY","qty":1},{"domain":"street","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50GNS","colorName":"GREEN","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV295N","styleName":"VINTAGE EMBO DAMAGE UNSTRUCTURED BALLCAP","color":"50CGS","colorName":"GRAY","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BRS","colorName":"BROWN","qty":1}],"M02":[{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BKS","colorName":"BLACK","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"07BLS","colorName":"BLUE","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BGS","colorName":"BEIGE","qty":2}],"M05":[{"domain":"vintage_feminine","styleCode":"3ACPV106N","styleName":"VINTAGE DEMAGE CURVE LOGO UNSTRUCTURED BALLCAP","color":"50GRS","colorName":"GRAY","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50LDP","colorName":"PURPLE","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BKS","colorName":"BLACK","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":1}],"M09":[{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"43SAM","colorName":"BROWN","qty":9},{"domain":"vintage_feminine","styleCode":"3ACPB356N","styleName":"FEMININE WELLNESS UNSTRUCTURED BALLCAP","color":"50CRS","colorName":"WHITE","qty":8},{"domain":"vintage_feminine","styleCode":"3ACPVV14N","styleName":"BASIC WASHING UNSTRUCTURED BALL CAP","color":"07SBS","colorName":"BLUE","qty":7},{"domain":"vintage_feminine","styleCode":"3ACPV295N","styleName":"VINTAGE EMBO DAMAGE UNSTRUCTURED BALLCAP","color":"50CGS","colorName":"GRAY","qty":6},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":4},{"domain":"vintage_feminine","styleCode":"3ACPVV14N","styleName":"BASIC WASHING UNSTRUCTURED BALL CAP","color":"50COS","colorName":"PINK","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BKS","colorName":"BLACK","qty":2}],"M10":[{"domain":"vintage_feminine","styleCode":"3ACPB356N","styleName":"FEMININE WELLNESS UNSTRUCTURED BALLCAP","color":"07MTP","colorName":"GREEN","qty":10},{"domain":"vintage_feminine","styleCode":"3ACPB356N","styleName":"FEMININE WELLNESS UNSTRUCTURED BALLCAP","color":"50CRS","colorName":"WHITE","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"07PKS","colorName":"PINK","qty":1}],"M11":[{"domain":"vintage_feminine","styleCode":"3ACPV106N","styleName":"VINTAGE DEMAGE CURVE LOGO UNSTRUCTURED BALLCAP","color":"50GRS","colorName":"GRAY","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV325N","styleName":"JELLY COLOR BLOCK  UNSTRUCTURED BALLCAP","color":"07MAL","colorName":"PURPLE","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV325N","styleName":"JELLY COLOR BLOCK  UNSTRUCTURED BALLCAP","color":"50BGS","colorName":"BEIGE","qty":1}],"M14":[{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPVV14N","styleName":"BASIC WASHING UNSTRUCTURED BALL CAP","color":"50COS","colorName":"PINK","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPV295N","styleName":"VINTAGE EMBO DAMAGE UNSTRUCTURED BALLCAP","color":"50CGS","colorName":"GRAY","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"07RBS","colorName":"BLUE","qty":1}],"M17":[{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50BGS","colorName":"BEIGE","qty":4},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"50BKS","colorName":"BLACK","qty":3},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"50PKS","colorName":"PINK","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BGS","colorName":"BEIGE","qty":3},{"domain":"cp6677","styleCode":"3ACP6601N","styleName":"ACE UNSTRUCTURED BALLCAP","color":"07GNS","colorName":"GREEN","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50ORL","colorName":"ORANGE","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BKS","colorName":"BLACK","qty":2},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"50WHS","colorName":"WHITE","qty":1}],"M16":[{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50IVS","colorName":"WHITE","qty":9},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"07WIS","colorName":"RED","qty":8},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"45PKM","colorName":"PINK","qty":8},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"50YEL","colorName":"YELLOW","qty":7},{"domain":"street_structured","styleCode":"3ACP8501N","styleName":"Diamond Stamp Structured Ball Cap","color":"50GOS","colorName":"YELLOW","qty":7},{"domain":"cp6677","styleCode":"3ACP6601N","styleName":"ACE UNSTRUCTURED BALLCAP","color":"50NYS","colorName":"NAVY","qty":6},{"domain":"street_structured","styleCode":"3ACPB346N","styleName":"FEMININE WELLNESS STRUCTURED BALLCAP","color":"50CRS","colorName":"WHITE","qty":6},{"domain":"cp6677","styleCode":"3ACP6601N","styleName":"ACE UNSTRUCTURED BALLCAP","color":"50BGD","colorName":"BEIGE","qty":4},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"07GNS","colorName":"GREEN","qty":3},{"domain":"cp6677","styleCode":"3ACP6601N","styleName":"ACE UNSTRUCTURED BALLCAP","color":"07GNS","colorName":"GREEN","qty":3},{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50SBL","colorName":"BLUE","qty":3},{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50GNS","colorName":"GREEN","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"07BLS","colorName":"BLUE","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"07PKS","colorName":"PINK","qty":3},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"50PPS","colorName":"PURPLE","qty":2},{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50BGS","colorName":"BEIGE","qty":2},{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50COP","colorName":"PINK","qty":2},{"domain":"street_structured","styleCode":"3ACP8501N","styleName":"Diamond Stamp Structured Ball Cap","color":"50IVS","colorName":"WHITE","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPVV14N","styleName":"BASIC WASHING UNSTRUCTURED BALL CAP","color":"50GRD","colorName":"GRAY","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPV106N","styleName":"VINTAGE DEMAGE CURVE LOGO UNSTRUCTURED BALLCAP","color":"50GRS","colorName":"GRAY","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":1}],"M18":[{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50SBL","colorName":"BLUE","qty":11},{"domain":"street_structured","styleCode":"3ACPB225N","styleName":"NEW STRUCTURED BALL CAP","color":"45NYS","colorName":"NAVY","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"07CGD","colorName":"GRAY","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"07PKS","colorName":"PINK","qty":3},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"45PKM","colorName":"PINK","qty":1},{"domain":"cp6677","styleCode":"3ACP7701N","styleName":"Rookie Slider Cap (CP77)","color":"50WHS","colorName":"WHITE","qty":1}],"M22":[{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"07NYS","colorName":"NAVY","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPV325N","styleName":"JELLY COLOR BLOCK  UNSTRUCTURED BALLCAP","color":"07NYL","colorName":"NAVY","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPH014N","styleName":"HEART STRUCTURED BALL CAP","color":"50CRD","colorName":"WHITE","qty":5},{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"07BLS","colorName":"BLUE","qty":4},{"domain":"street_structured","styleCode":"3ACP8501N","styleName":"Diamond Stamp Structured Ball Cap","color":"50BKS","colorName":"BLACK","qty":4},{"domain":"street_structured","styleCode":"3ACP8501N","styleName":"Diamond Stamp Structured Ball Cap","color":"50IVS","colorName":"WHITE","qty":4},{"domain":"vintage_feminine","styleCode":"3ACPH024N","styleName":"DENIM HEART UNSTRUCTURED BALL CAP","color":"50INS","colorName":"NAVY","qty":4},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50NYS","colorName":"NAVY","qty":4},{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"50CGS","colorName":"GRAY","qty":3},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BRS","colorName":"BROWN","qty":3},{"domain":"cp6677","styleCode":"3ACP6601N","styleName":"ACE UNSTRUCTURED BALLCAP","color":"45CGS","colorName":"GRAY","qty":1},{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPVV14N","styleName":"BASIC WASHING UNSTRUCTURED BALL CAP","color":"50GRD","colorName":"GRAY","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BGS","colorName":"BEIGE","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPB176N","styleName":"STAR BUNNY UNSTRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":1}],"MC1":[{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"43RDD","colorName":"RED","qty":9},{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"50BGL","colorName":"BEIGE","qty":6},{"domain":"vintage_feminine","styleCode":"3ACPB176N","styleName":"STAR BUNNY UNSTRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":6},{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"07INS","colorName":"NAVY","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BKS","colorName":"BLACK","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"07BLS","colorName":"BLUE","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"07PKS","colorName":"PINK","qty":1}],"MC2":[{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"07MAL","colorName":"PURPLE","qty":7},{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50IVS","colorName":"WHITE","qty":6},{"domain":"street_structured","styleCode":"3ACPB346N","styleName":"FEMININE WELLNESS STRUCTURED BALLCAP","color":"50CRS","colorName":"WHITE","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPV325N","styleName":"JELLY COLOR BLOCK  UNSTRUCTURED BALLCAP","color":"07NYL","colorName":"NAVY","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"07BLS","colorName":"BLUE","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BKS","colorName":"BLACK","qty":4},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":3},{"domain":"street_structured","styleCode":"3ACPB245N","styleName":"SIGNATURE UNSTRUCTURED BALLCAP","color":"50COP","colorName":"PINK","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50BGS","colorName":"BEIGE","qty":2},{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"07INS","colorName":"NAVY","qty":1},{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"07PKS","colorName":"PINK","qty":1}],"MC3":[{"domain":"vintage_feminine","styleCode":"3ACPV216N","styleName":"SIGNATURE CURSIVE STRUCTURED BALLCAP","color":"07CGD","colorName":"GRAY","qty":9},{"domain":"vintage_feminine","styleCode":"3ACPVV14N","styleName":"BASIC WASHING UNSTRUCTURED BALL CAP","color":"50NYS","colorName":"NAVY","qty":8},{"domain":"vintage_feminine","styleCode":"3ACPB356N","styleName":"FEMININE WELLNESS UNSTRUCTURED BALLCAP","color":"50CRS","colorName":"WHITE","qty":7},{"domain":"vintage_feminine","styleCode":"3ACPB045N","styleName":"NANO LOGO UNSTRUCTURED BALL CAP","color":"50BRS","colorName":"BROWN","qty":7},{"domain":"vintage_feminine","styleCode":"3ACPV165N","styleName":"VARSITY VINTAGE CULSIVE STITCH UNSTRUCTURED BALL CAP","color":"43RDD","colorName":"RED","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPV315N","styleName":"JELLY UNSTRUCTURED BALLCAP","color":"50ORL","colorName":"ORANGE","qty":5},{"domain":"vintage_feminine","styleCode":"3ACPB176N","styleName":"STAR BUNNY UNSTRUCTURED BALLCAP","color":"50BKS","colorName":"BLACK","qty":1}]};
+var STORE_NAMES = {M01:'Hollywood Plaza',M02:'Times Square',M05:'LCX',M09:'Metropolis Plaza',M10:'iSquare',M11:'APM',M14:'NTP',M16:'Hysan Place',M17:'TMTP',M18:'Langham Place',M22:'YOHO',MC1:'MC1 Venetian',MC2:'Londoner',MC3:'Senado Square'};
+var STORE_ORDER = ['M01','M02','M05','M09','M10','M11','M14','M16','M17','M18','M22','MC1','MC2','MC3'];
+var DOMAIN_META = {
+  meow: {label:'Meow Beanies', color:'var(--dom-meow)'},
+  other_beanies: {label:'Other Beanies', color:'var(--dom-other)'},
+  cp6677: {label:'CP66+CP77', color:'var(--dom-cp)'},
+  street: {label:'Street', color:'var(--dom-street)'},
+  structured: {label:'Structured', color:'var(--dom-structured)'},
+  street_structured: {label:'Street+Structured', color:'var(--dom-street)'},
+  vintage_feminine: {label:'Vintage+Feminine', color:'var(--dom-vintage)'}
+};
+
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+var totalGaps = 0;
+STORE_ORDER.forEach(function(s){ totalGaps += (REPORT[s]||[]).length; });
+document.getElementById('statTotal').textContent = totalGaps;
+
+var domainsUsed = {};
+STORE_ORDER.forEach(function(s){ (REPORT[s]||[]).forEach(function(g){ domainsUsed[g.domain]=true; }); });
+document.getElementById('statDomains').textContent = Object.keys(domainsUsed).length;
+
+var activeStore = null, activeDomain = null;
+
+function renderBars(){
+  var maxCount = Math.max.apply(null, STORE_ORDER.map(function(s){ return (REPORT[s]||[]).length; }));
+  var html = STORE_ORDER.map(function(s){
+    var n = (REPORT[s]||[]).length;
+    var pct = maxCount ? Math.round(n/maxCount*100) : 0;
+    return '<div class="bar-row' + (activeStore===s?' active':'') + '" data-store="' + s + '">' +
+      '<span class="lbl">' + s + '</span>' +
+      '<span class="track"><span class="fill" style="width:' + pct + '%"></span></span>' +
+      '<span class="n">' + n + '</span>' +
+    '</div>';
+  }).join('');
+  document.getElementById('barChart').innerHTML = html;
+  document.querySelectorAll('.bar-row').forEach(function(el){
+    el.addEventListener('click', function(){
+      var s = el.dataset.store;
+      activeStore = (activeStore === s) ? null : s;
+      renderBars();
+      renderLegend();
+      renderList();
+      if (activeStore) {
+        var target = document.getElementById('card-' + activeStore);
+        if (target) { target.open = true; target.scrollIntoView({behavior:'smooth', block:'start'}); }
+      }
+    });
+  });
+}
+
+function renderLegend(){
+  var html = Object.keys(DOMAIN_META).filter(function(d){ return domainsUsed[d]; }).map(function(d){
+    var m = DOMAIN_META[d];
+    return '<div class="leg-chip' + (activeDomain===d?' active':'') + '" data-domain="' + d + '" style="--c:' + m.color + '"><span class="sw"></span>' + esc(m.label) + '</div>';
+  }).join('');
+  document.getElementById('domainLegend').innerHTML = html;
+  document.querySelectorAll('.leg-chip').forEach(function(el){
+    el.addEventListener('click', function(){
+      var d = el.dataset.domain;
+      activeDomain = (activeDomain === d) ? null : d;
+      renderLegend();
+      renderList();
+    });
+  });
+}
+
+function renderList(){
+  var q = (document.getElementById('searchBox').value || '').trim().toUpperCase();
+  var html = '';
+  STORE_ORDER.forEach(function(s){
+    if (activeStore && activeStore !== s) return;
+    var gaps = (REPORT[s] || []).slice();
+    if (activeDomain) gaps = gaps.filter(function(g){ return g.domain === activeDomain; });
+    if (q) gaps = gaps.filter(function(g){
+      return (g.styleCode + ' ' + g.styleName + ' ' + g.color + ' ' + g.colorName).toUpperCase().indexOf(q) !== -1;
+    });
+    if (!gaps.length) return;
+    var maxQty = Math.max.apply(null, gaps.map(function(g){ return g.qty; }));
+    var rows = gaps.map(function(g){
+      var m = DOMAIN_META[g.domain] || {label:g.domain, color:'var(--muted)'};
+      var barW = maxQty ? Math.max(6, Math.round(g.qty / maxQty * 60)) : 0;
+      return '<tr>' +
+        '<td><span class="dom-badge" style="background:' + m.color + '">' + esc(m.label) + '</span></td>' +
+        '<td><span class="mono">' + esc(g.styleCode) + '</span><br><span class="style-name">' + esc(g.styleName) + '</span></td>' +
+        '<td><span class="mono">' + esc(g.color) + '</span></td>' +
+        '<td>' + esc(g.colorName) + '</td>' +
+        '<td><span class="qty">' + g.qty + '</span><span class="qty-bar" style="width:' + barW + 'px"></span></td>' +
+      '</tr>';
+    }).join('');
+    html += '<details class="store-card" id="card-' + s + '"' + (activeStore===s?' open':'') + '>' +
+      '<summary><div><span class="scode">' + s + '</span><span class="sname">' + esc(STORE_NAMES[s]) + '</span></div>' +
+      '<div style="display:flex;align-items:center;gap:10px"><span class="scount">' + gaps.length + ' gap' + (gaps.length===1?'':'s') + '</span><span class="chev">&#9656;</span></div></summary>' +
+      '<div style="overflow-x:auto"><table class="gap-table"><thead><tr><th>Domain</th><th>Style</th><th>Colour</th><th>Colour name</th><th>Real stock</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+    '</details>';
+  });
+  if (!html) html = '<div class="empty-note">No gaps match this filter.</div>';
+  document.getElementById('storeList').innerHTML = html;
+}
+
+document.getElementById('searchBox').addEventListener('input', renderList);
+document.getElementById('clearBtn').addEventListener('click', function(){
+  activeStore = null; activeDomain = null;
+  document.getElementById('searchBox').value = '';
+  renderBars(); renderLegend(); renderList();
+});
+
+renderBars();
+renderLegend();
+renderList();
+</script>
+
+</body></html>
