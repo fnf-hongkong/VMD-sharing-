@@ -1,0 +1,1702 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OCT 2nd DP guideline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --city-hunter-blue: #0725b0;
+      --modest-white: #e5ded4;
+      --birdhouse-brown: #6b4a3a;
+      --nano-white: #f2efea;
+      --brownish-black: #3e3a36;
+      --white: #ffffff;
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --shadow: 0 10px 30px rgba(62, 58, 54, 0.08);
+      --max: 1180px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: "Poppins", system-ui, sans-serif;
+      background: var(--nano-white);
+      color: var(--brownish-black);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    /* Sticky nav */
+    .sticky-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(242, 239, 234, 0.92);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(107, 74, 58, 0.12);
+    }
+
+    .sticky-nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .nav-brand {
+      font-family: "Fredoka", sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--city-hunter-blue);
+      margin-right: auto;
+      letter-spacing: 0.02em;
+    }
+
+    .nav-chip {
+      appearance: none;
+      border: none;
+      text-decoration: none;
+      font-family: "Poppins", sans-serif;
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: var(--modest-white);
+      color: var(--birdhouse-brown);
+      transition: background 0.2s, color 0.2s, transform 0.15s;
+      cursor: pointer;
+    }
+
+    .nav-chip:hover {
+      background: var(--city-hunter-blue);
+      color: var(--white);
+      transform: translateY(-1px);
+    }
+
+    /* Page shell */
+    .page {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 28px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    /* Hero title band */
+    .hero-band {
+      background: var(--city-hunter-blue);
+      color: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 48px 40px 40px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-band::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 12% 20%, rgba(255,255,255,0.08) 0 40%, transparent 41%),
+        radial-gradient(circle at 88% 70%, rgba(255,255,255,0.06) 0 35%, transparent 36%);
+      pointer-events: none;
+    }
+
+    .hero-kicker {
+      font-family: "Poppins", sans-serif;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-bottom: 12px;
+      position: relative;
+    }
+
+    .hero-title {
+      font-family: "Fredoka", sans-serif;
+      font-weight: 700;
+      font-size: clamp(2.2rem, 5vw, 3.6rem);
+      line-height: 1.05;
+      letter-spacing: 0.01em;
+      position: relative;
+    }
+
+    .hero-sub {
+      margin-top: 14px;
+      font-size: 0.95rem;
+      opacity: 0.9;
+      position: relative;
+    }
+
+    /* Section label */
+    .section-label {
+      font-family: "Fredoka", sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--city-hunter-blue);
+      margin-bottom: 14px;
+    }
+
+    /* Overview chips (logo-variation style) */
+    .chip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 16px;
+    }
+
+    .chip-card {
+      border-radius: var(--radius-md);
+      padding: 28px 22px;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 6px;
+      text-decoration: none;
+      color: inherit;
+      box-shadow: var(--shadow);
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+
+    .chip-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 34px rgba(62, 58, 54, 0.12);
+    }
+
+    .chip-card.blue {
+      background: var(--city-hunter-blue);
+      color: var(--white);
+    }
+
+    .chip-card.cream {
+      background: var(--modest-white);
+      color: var(--city-hunter-blue);
+      border: 2px solid rgba(7, 37, 176, 0.08);
+    }
+
+    .chip-card.brown {
+      background: var(--birdhouse-brown);
+      color: var(--white);
+    }
+
+    .chip-card.nano {
+      background: var(--white);
+      color: var(--city-hunter-blue);
+      border: 2px solid rgba(7, 37, 176, 0.12);
+    }
+
+    .chip-tag {
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    .chip-title {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.45rem;
+      font-weight: 600;
+      line-height: 1.15;
+    }
+
+    .chip-meta {
+      font-size: 0.82rem;
+      opacity: 0.85;
+    }
+
+    /* Palette strip */
+    .palette-band {
+      background: var(--white);
+      border-radius: var(--radius-md);
+      padding: 22px 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px 28px;
+    }
+
+    .palette-swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 22px;
+      flex: 1;
+    }
+
+    .swatch {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .swatch-dot {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 2px solid rgba(62, 58, 54, 0.08);
+      flex-shrink: 0;
+    }
+
+    .swatch-name {
+      font-size: 0.72rem;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+
+    .swatch-hex {
+      font-size: 0.68rem;
+      color: var(--birdhouse-brown);
+      opacity: 0.85;
+      font-family: ui-monospace, monospace;
+    }
+
+    /* Type band */
+    .type-band {
+      background: var(--city-hunter-blue);
+      color: var(--white);
+      border-radius: var(--radius-md);
+      padding: 28px 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    .type-sample .aa {
+      font-size: 3rem;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .type-sample.display .aa { font-family: "Fredoka", sans-serif; font-weight: 700; }
+    .type-sample.body .aa { font-family: "Poppins", sans-serif; font-weight: 600; }
+
+    .type-sample .name {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .type-sample .role {
+      font-size: 0.8rem;
+      opacity: 0.85;
+    }
+
+    /* Application tabs */
+    .app-tabs {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .tab-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 6px;
+      background: var(--modest-white);
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+      border: 1px solid rgba(107, 74, 58, 0.12);
+      border-bottom: none;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+    }
+
+    .tab-btn {
+      appearance: none;
+      border: none;
+      font-family: "Fredoka", sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding: 12px 22px;
+      border-radius: 999px;
+      background: transparent;
+      color: var(--birdhouse-brown);
+      cursor: pointer;
+      transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+      white-space: nowrap;
+      letter-spacing: 0.02em;
+    }
+
+    .tab-btn:hover {
+      background: rgba(7, 37, 176, 0.08);
+      color: var(--city-hunter-blue);
+    }
+
+    .tab-btn[aria-selected="true"] {
+      background: var(--city-hunter-blue);
+      color: var(--white);
+      box-shadow: 0 4px 12px rgba(7, 37, 176, 0.28);
+    }
+
+    .tab-btn:focus-visible {
+      outline: 2px solid var(--city-hunter-blue);
+      outline-offset: 2px;
+    }
+
+    .tab-panels {
+      background: transparent;
+    }
+
+    .panel {
+      background: var(--white);
+      border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: visible;
+      display: flex;
+      flex-direction: column;
+      border: 1px solid rgba(107, 74, 58, 0.12);
+      border-top: none;
+    }
+
+    .panel[hidden] {
+      display: none !important;
+    }
+
+    .panel-main {
+      /* full-width active tab */
+    }
+
+    .panel-head {
+      padding: 18px 22px 12px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      border-bottom: 1px solid rgba(62, 58, 54, 0.08);
+    }
+
+    .panel-head h2 {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.35rem;
+      font-weight: 600;
+      color: var(--city-hunter-blue);
+    }
+
+    .panel-badge {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 5px 10px;
+      border-radius: 999px;
+      background: var(--modest-white);
+      color: var(--birdhouse-brown);
+    }
+
+    .panel-badge.live {
+      background: rgba(7, 37, 176, 0.1);
+      color: var(--city-hunter-blue);
+    }
+
+    .panel-badge.wait {
+      background: rgba(107, 74, 58, 0.12);
+      color: var(--birdhouse-brown);
+    }
+
+    .panel-body {
+      padding: 18px 22px 28px;
+      flex: 1;
+      overflow: visible;
+    }
+
+    /* Stage wrap — side gutters so left/right tooltips aren’t clipped */
+    .stage-wrap {
+      padding: 8px 64px 16px;
+      overflow: visible;
+      max-width: 100%;
+      margin: 0 auto;
+    }
+
+    /* Hotspot stage */
+    .hotspot-stage {
+      position: relative;
+      width: 100%;
+      border-radius: var(--radius-md);
+      overflow: visible;
+      background: var(--nano-white);
+      border: 1px solid rgba(62, 58, 54, 0.06);
+      aspect-ratio: 1152 / 864;
+    }
+
+    .hotspot-stage img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      user-select: none;
+      pointer-events: none;
+      border-radius: var(--radius-md);
+    }
+
+    #third-stage {
+      aspect-ratio: 864 / 1152;
+      max-width: 520px;
+      margin-inline: auto;
+    }
+
+    #type-i-stage {
+      aspect-ratio: 1152 / 880;
+    }
+
+    #overall-stage {
+      aspect-ratio: 1152 / 864;
+    }
+
+    .store-block-primary {
+      grid-column: 1 / -1;
+    }
+
+    .store-block .panel-badge {
+      display: inline-block;
+      margin-bottom: 2px;
+    }
+
+    .store-grid.stack {
+      grid-template-columns: 1fr;
+    }
+
+    .store-grid.stack .store-block + .store-block {
+      border-left: none;
+      border-top: 1px solid rgba(62, 58, 54, 0.1);
+    }
+
+    .hotspot {
+      position: absolute;
+      appearance: none;
+      -webkit-appearance: none;
+      background: transparent;
+      border: 2px solid transparent;
+      border-radius: 10px;
+      padding: 0;
+      margin: 0;
+      cursor: pointer;
+      transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+      z-index: 2;
+    }
+
+    .hotspot:hover,
+    .hotspot:focus-visible {
+      background: rgba(7, 37, 176, 0.18);
+      border-color: var(--city-hunter-blue);
+      box-shadow: 0 0 0 3px rgba(7, 37, 176, 0.15);
+      outline: none;
+    }
+
+    .hotspot-dot {
+      position: absolute;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--city-hunter-blue);
+      border: 2px solid var(--white);
+      box-shadow: 0 2px 6px rgba(7, 37, 176, 0.35);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0.9);
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+
+    .hotspot:hover .hotspot-dot,
+    .hotspot:focus-visible .hotspot-dot {
+      opacity: 1;
+      transform: translate(-50%, -50%) scale(1.15);
+    }
+
+    .tooltip {
+      position: absolute;
+      z-index: 10;
+      min-width: 180px;
+      max-width: 240px;
+      background: var(--white);
+      color: var(--brownish-black);
+      border-radius: 14px;
+      padding: 12px 14px;
+      box-shadow: 0 12px 28px rgba(62, 58, 54, 0.18);
+      border: 1px solid rgba(7, 37, 176, 0.12);
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity 0.15s, transform 0.15s;
+      font-size: 0.8rem;
+    }
+
+    .hotspot:hover .tooltip,
+    .hotspot:focus-visible .tooltip {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tooltip-role {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--city-hunter-blue);
+      margin-bottom: 2px;
+    }
+
+    .tooltip-name {
+      font-weight: 600;
+      line-height: 1.3;
+      margin-bottom: 6px;
+    }
+
+    .tooltip-sku {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.72rem;
+      background: var(--nano-white);
+      color: var(--birdhouse-brown);
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+    }
+
+    /* Position tooltips so they stay in frame */
+    .tooltip.above { bottom: calc(100% + 10px); left: 50%; transform: translate(-50%, 6px); }
+    .hotspot:hover .tooltip.above,
+    .hotspot:focus-visible .tooltip.above { transform: translate(-50%, 0); }
+
+    .tooltip.below { top: calc(100% + 10px); left: 50%; transform: translate(-50%, -6px); }
+    .hotspot:hover .tooltip.below,
+    .hotspot:focus-visible .tooltip.below { transform: translate(-50%, 0); }
+
+    .tooltip.left { right: calc(100% + 10px); top: 50%; transform: translate(6px, -50%); }
+    .hotspot:hover .tooltip.left,
+    .hotspot:focus-visible .tooltip.left { transform: translate(0, -50%); }
+
+    .tooltip.right { left: calc(100% + 10px); top: 50%; transform: translate(-6px, -50%); }
+    .hotspot:hover .tooltip.right,
+    .hotspot:focus-visible .tooltip.right { transform: translate(0, -50%); }
+
+    .hint {
+      margin-top: 10px;
+      font-size: 0.78rem;
+      color: var(--birdhouse-brown);
+    }
+
+    /* SKU tables */
+    .sku-block { margin-top: 20px; }
+
+    .sku-block h3 {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--brownish-black);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .role-pill {
+      font-family: "Poppins", sans-serif;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: var(--city-hunter-blue);
+      color: var(--white);
+    }
+
+    .role-pill.m { background: var(--birdhouse-brown); }
+
+    .sku-note {
+      font-size: 0.75rem;
+      color: var(--birdhouse-brown);
+      margin-bottom: 10px;
+      opacity: 0.9;
+    }
+
+    table.sku-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      background: var(--nano-white);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+    }
+
+    table.sku-table th,
+    table.sku-table td {
+      text-align: center;
+      padding: 9px 11px;
+      border-bottom: 1px solid rgba(62, 58, 54, 0.08);
+      vertical-align: middle;
+    }
+
+    table.sku-table th {
+      background: var(--modest-white);
+      font-weight: 600;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--birdhouse-brown);
+    }
+
+    table.sku-table tr:last-child td { border-bottom: none; }
+
+    table.sku-table code {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 0.72rem;
+      color: var(--city-hunter-blue);
+      background: rgba(7, 37, 176, 0.06);
+      padding: 2px 6px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    table.sku-table .cat {
+      font-weight: 700;
+      font-size: 0.7rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--birdhouse-brown);
+      white-space: nowrap;
+      width: 7.5rem;
+    }
+
+    table.sku-table th.sku-col,
+    table.sku-table td.sku-col {
+      width: 11.5rem;
+    }
+
+    /* Placeholder panels */
+    .placeholder-art {
+      aspect-ratio: 4 / 5;
+      border-radius: var(--radius-md);
+      background:
+        repeating-linear-gradient(
+          -45deg,
+          var(--modest-white),
+          var(--modest-white) 12px,
+          #ebe4da 12px,
+          #ebe4da 24px
+        );
+      border: 2px dashed rgba(107, 74, 58, 0.28);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px;
+      gap: 8px;
+      color: var(--birdhouse-brown);
+      position: relative;
+    }
+
+    .placeholder-art .icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: rgba(7, 37, 176, 0.1);
+      color: var(--city-hunter-blue);
+      display: grid;
+      place-items: center;
+      font-family: "Fredoka", sans-serif;
+      font-weight: 700;
+      font-size: 1.2rem;
+    }
+
+    .placeholder-art strong {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1rem;
+      color: var(--brownish-black);
+    }
+
+    .placeholder-art span {
+      font-size: 0.78rem;
+      max-width: 200px;
+    }
+
+    .disabled-note {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      color: var(--birdhouse-brown);
+      font-style: italic;
+    }
+
+    /* DP setting band */
+    .dp-band {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .dp-band-head {
+      background: var(--modest-white);
+      padding: 20px 24px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .dp-band-head h2 {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--city-hunter-blue);
+    }
+
+    .dp-band-head p {
+      font-size: 0.82rem;
+      color: var(--birdhouse-brown);
+    }
+
+    .store-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+
+    .store-block {
+      padding: 22px 24px 26px;
+    }
+
+    .store-block + .store-block {
+      border-left: 1px solid rgba(62, 58, 54, 0.1);
+    }
+
+    .store-title {
+      font-family: "Fredoka", sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--brownish-black);
+    }
+
+    .store-meta {
+      font-size: 0.75rem;
+      color: var(--birdhouse-brown);
+      margin-bottom: 14px;
+    }
+
+    /* Footer */
+    .footer-note {
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--birdhouse-brown);
+      padding: 8px 0 0;
+    }
+
+    .footer-note code {
+      font-family: ui-monospace, monospace;
+      font-size: 0.72rem;
+      background: var(--modest-white);
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    /* Responsive */
+    @media (max-width: 960px) {
+      .chip-grid { grid-template-columns: 1fr 1fr; }
+      .store-grid { grid-template-columns: 1fr; }
+      .store-block + .store-block {
+        border-left: none;
+        border-top: 1px solid rgba(62, 58, 54, 0.1);
+      }
+      .type-band { grid-template-columns: 1fr; }
+      .stage-wrap { padding: 8px 40px 14px; }
+    }
+
+    @media (max-width: 640px) {
+      .chip-grid { grid-template-columns: 1fr; }
+      .page { padding: 16px 14px 60px; gap: 18px; }
+      .hero-band { padding: 36px 22px 32px; border-radius: 22px; }
+      .sticky-nav-inner { padding: 10px 14px; }
+      .nav-brand { width: 100%; margin-bottom: 4px; }
+      .stage-wrap { padding: 6px 28px 12px; }
+      .tab-btn { padding: 10px 16px; font-size: 0.88rem; }
+      .panel-body { padding: 14px 14px 22px; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="sticky-nav" aria-label="Section navigation">
+    <div class="sticky-nav-inner">
+      <div class="nav-brand">OCT 2nd DP guideline</div>
+      <a class="nav-chip" href="#overview">Overview</a>
+      <a class="nav-chip" href="#main-mannequin">Main</a>
+      <a class="nav-chip" href="#sub-mannequin">Sub</a>
+      <a class="nav-chip" href="#third-mannequin">Third</a>
+      <a class="nav-chip" href="#dp-setting">DP Setting</a>
+    </div>
+  </nav>
+
+  <main class="page">
+    <!-- Hero -->
+    <header class="hero-band" id="top">
+      <div class="hero-kicker">Visual Merchandising</div>
+      <h1 class="hero-title">OCT 2nd DP guideline</h1>
+      <p class="hero-sub">Main, Sub &amp; Third locked · Type I + small round DP · overall look live</p>
+    </header>
+
+    <!-- Overview chips -->
+    <section id="overview" aria-labelledby="overview-label">
+      <div class="section-label" id="overview-label">Guideline map</div>
+      <div class="chip-grid">
+        <a class="chip-card blue" href="#main-mannequin">
+          <span class="chip-tag">01 · Live</span>
+          <span class="chip-title">Main Mannequin</span>
+          <span class="chip-meta">Pair image + hover SKU</span>
+        </a>
+        <a class="chip-card cream" href="#sub-mannequin">
+          <span class="chip-tag">02 · Live</span>
+          <span class="chip-title">Sub Mannequin</span>
+          <span class="chip-meta">Pair image + hover SKU</span>
+        </a>
+        <a class="chip-card brown" href="#third-mannequin">
+          <span class="chip-tag">03 · Live</span>
+          <span class="chip-title">Third Mannequin</span>
+          <span class="chip-meta">Solo image + hover SKU</span>
+        </a>
+        <a class="chip-card nano" href="#dp-setting">
+          <span class="chip-tag">04 · Live</span>
+          <span class="chip-title">Type I Big DP</span>
+          <span class="chip-meta">Table image + hover SKU</span>
+        </a>
+        <a class="chip-card cream" href="#small-round-dp">
+          <span class="chip-tag">05 · Live</span>
+          <span class="chip-title">Small Round DP</span>
+          <span class="chip-meta">Table image + hover SKU</span>
+        </a>
+        <a class="chip-card blue" href="#overall-look">
+          <span class="chip-tag">06 · Live</span>
+          <span class="chip-title">Overall look</span>
+          <span class="chip-meta">Main MNQ + DP table</span>
+        </a>
+      </div>
+    </section>
+
+
+    <!-- Application: tabbed Main / Sub / Third -->
+    <section id="application" aria-label="Mannequin application">
+      <div class="section-label">Application</div>
+      <div class="app-tabs">
+        <div class="tab-list" role="tablist" aria-label="Mannequin views">
+          <button type="button" class="tab-btn" role="tab" id="tab-main"
+            aria-controls="main-mannequin" aria-selected="true" tabindex="0">Main</button>
+          <button type="button" class="tab-btn" role="tab" id="tab-sub"
+            aria-controls="sub-mannequin" aria-selected="false" tabindex="-1">Sub</button>
+          <button type="button" class="tab-btn" role="tab" id="tab-third"
+            aria-controls="third-mannequin" aria-selected="false" tabindex="-1">Third</button>
+        </div>
+        <div class="tab-panels">
+          <!-- MAIN -->
+          <article class="panel panel-main" role="tabpanel" id="main-mannequin"
+            aria-labelledby="tab-main">
+          <div class="panel-head">
+            <h2>Main Mannequin</h2>
+            <span class="panel-badge live">Locked pair</span>
+          </div>
+          <div class="panel-body">
+            <div class="stage-wrap">
+            <div class="hotspot-stage" id="main-stage" aria-label="Main mannequin pair with SKU hotspots">
+              <img src="main-mannequin-pair.jpg" alt="Main mannequin pair: men left back-facing, women right facing, white background" width="1152" height="864" />
+
+              <!-- WOMEN (right) — masks on apparel; SKU tooltip on the right -->
+              <button type="button" class="hotspot" style="left:57%; top:1.5%; width:15%; height:12%;"
+                data-sku="3ABNB0866 · 07GRP" data-name="Grey fluffy LA cat-ear boa beanie" data-role="Women"
+                aria-label="SKU: Grey fluffy LA cat-ear boa beanie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Grey fluffy LA cat-ear boa beanie</span>
+                  <span class="tooltip-sku">3ABNB0866 · 07GRP</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:51%; top:14%; width:24%; height:33%;"
+                data-sku="3FTRB0366 · 07LBL" data-name="Baby blue Dodgers double-zip fur-trim hoodie" data-role="Women"
+                aria-label="SKU: Baby blue Dodgers double-zip fur-trim hoodie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Baby blue Dodgers double-zip fur-trim hoodie</span>
+                  <span class="tooltip-sku">3FTRB0366 · 07LBL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:53%; top:47%; width:20%; height:15%;"
+                data-sku="3FDSB0664 · 14BKS" data-name="Charcoal studded denim cargo mini skirt" data-role="Women"
+                aria-label="SKU: Charcoal studded denim cargo mini skirt">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Charcoal studded denim cargo mini skirt</span>
+                  <span class="tooltip-sku">3FDSB0664 · 14BKS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:72%; top:40%; width:13%; height:16%;"
+                data-sku="3ACRBB16N · 43CRS" data-name="Cream boa crescent bag 21×15×4cm" data-role="Women"
+                aria-label="SKU: Cream boa crescent bag">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Cream boa crescent bag 21×15×4cm</span>
+                  <span class="tooltip-sku">3ACRBB16N · 43CRS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:78%; top:48%; width:9%; height:10%;"
+                data-sku="3AETMC16N · 07SBS" data-name="Baby blue kitty keyring (LA beanie)" data-role="Women"
+                aria-label="SKU: Baby blue kitty keyring">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Baby blue kitty keyring (LA beanie)</span>
+                  <span class="tooltip-sku">3AETMC16N · 07SBS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:54%; top:76%; width:20%; height:18%;"
+                data-sku="3ASXS016N · 07SBL (socks: no SKU)" data-name="Cream LA sneakers + long grey socks" data-role="Women"
+                aria-label="SKU: Cream LA sneakers and grey socks">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Cream LA sneakers + long grey socks</span>
+                  <span class="tooltip-sku">3ASXS016N · 07SBL (socks: no SKU)</span>
+                </span>
+              </button>
+
+              <!-- MEN (left) — masks on apparel; SKU tooltip on the left -->
+              <button type="button" class="hotspot" style="left:28%; top:1.5%; width:14%; height:11%;"
+                data-sku="3ACPB0266 · 50GRL" data-name="Grey corduroy NY cap" data-role="Men"
+                aria-label="SKU: Grey corduroy NY cap">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Grey corduroy NY cap</span>
+                  <span class="tooltip-sku">3ACPB0266 · 50GRL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:20%; top:13%; width:28%; height:33%;"
+                data-sku="3AHDB0964 · 07BKS" data-name="Black MLB/Dodgers back-graphic hoodie" data-role="Men"
+                aria-label="SKU: Black MLB/Dodgers back-graphic hoodie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Black MLB/Dodgers back-graphic hoodie</span>
+                  <span class="tooltip-sku">3AHDB0964 · 07BKS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:27%; top:44%; width:16%; height:8%;"
+                data-sku="Any white TS · XL" data-name="Oversized white tee (hem show)" data-role="Men"
+                aria-label="SKU: Oversized white tee">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Oversized white tee (hem show)</span>
+                  <span class="tooltip-sku">Any white TS · XL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:23%; top:52%; width:24%; height:28%;"
+                data-sku="3LDPV0164 · 50INS" data-name="Medium blue NY jeans" data-role="Men"
+                aria-label="SKU: Medium blue NY jeans">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Medium blue NY jeans</span>
+                  <span class="tooltip-sku">3LDPV0164 · 50INS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:27%; top:82%; width:16%; height:12%;"
+                data-sku="3ARNCY16N · 50GRS" data-name="Chunky mauve/grey NY sneakers" data-role="Men"
+                aria-label="SKU: Chunky mauve/grey NY sneakers">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Chunky mauve/grey NY sneakers</span>
+                  <span class="tooltip-sku">3ARNCY16N · 50GRS</span>
+                </span>
+              </button>
+            </div>
+            </div>
+            <p class="hint">Hover or focus apparel to reveal SKU</p>
+
+            <div class="sku-block">
+              <h3><span class="role-pill">W</span> Women · right</h3>
+              <p class="sku-note">By category · SKU first for store follow-up</p>
+              <table class="sku-table">
+                <thead>
+                  <tr><th>Category</th><th class="sku-col">SKU</th><th>Item</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="cat">Top</td><td class="sku-col"><code>3FTRB0366 · 07LBL</code></td><td>Baby blue Dodgers double-zip fur-trim hoodie</td></tr>
+                  <tr><td class="cat">Bottom</td><td class="sku-col"><code>3FDSB0664 · 14BKS</code></td><td>Charcoal studded denim cargo mini skirt</td></tr>
+                  <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ABNB0866 · 07GRP</code></td><td>Grey fluffy LA cat-ear boa beanie</td></tr>
+                  <tr><td class="cat">Bag</td><td class="sku-col"><code>3ACRBB16N · 43CRS</code></td><td>Cream boa crescent bag 21×15×4cm</td></tr>
+                  <tr><td class="cat">Accessory</td><td class="sku-col"><code>3AETMC16N · 07SBS</code></td><td>Baby blue kitty keyring (LA beanie)</td></tr>
+                  <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ASXS016N · 07SBL</code></td><td>Cream LA sneakers</td></tr>
+                  <tr><td class="cat">Socks</td><td class="sku-col"><code>no SKU</code></td><td>Long grey socks</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sku-block">
+              <h3><span class="role-pill m">M</span> Men · left · full back</h3>
+              <p class="sku-note">By category · SKU first for store follow-up</p>
+              <table class="sku-table">
+                <thead>
+                  <tr><th>Category</th><th class="sku-col">SKU</th><th>Item</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="cat">Top</td><td class="sku-col"><code>3AHDB0964 · 07BKS</code></td><td>Black MLB/Dodgers back-graphic hoodie</td></tr>
+                  <tr><td class="cat">Base layer</td><td class="sku-col"><code>Any white TS · XL</code></td><td>Oversized white tee (hem show)</td></tr>
+                  <tr><td class="cat">Bottom</td><td class="sku-col"><code>3LDPV0164 · 50INS</code></td><td>Medium blue NY jeans</td></tr>
+                  <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ACPB0266 · 50GRL</code></td><td>Grey corduroy NY cap</td></tr>
+                  <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ARNCY16N · 50GRS</code></td><td>Chunky mauve/grey NY sneakers</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+          <!-- SUB -->
+          <article class="panel" role="tabpanel" id="sub-mannequin" hidden
+            aria-labelledby="tab-sub">
+          <div class="panel-head">
+            <h2>Sub Mannequin</h2>
+            <span class="panel-badge live">Locked pair</span>
+          </div>
+          <div class="panel-body">
+            <div class="stage-wrap">
+            <div class="hotspot-stage" id="sub-stage" aria-label="Sub mannequin pair with SKU hotspots">
+              <img src="sub-mannequin-pair.jpg" alt="Sub mannequin pair: men left, women right, white background" width="1152" height="864" />
+
+              <!-- WOMEN (right) — masks on apparel; SKU tooltip on the right -->
+              <button type="button" class="hotspot" style="left:58%; top:2%; width:14%; height:11%;"
+                data-sku="3ACPB2766 · 50BGS" data-name="Biscuit beige suede NY baseball cap" data-role="Women"
+                aria-label="SKU: Biscuit beige suede NY baseball cap">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Biscuit beige suede NY baseball cap</span>
+                  <span class="tooltip-sku">3ACPB2766 · 50BGS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:52%; top:14%; width:22%; height:28%;"
+                data-sku="3FMTM0264 · 50SAL" data-name="Light beige NY monogram cropped quarter-zip" data-role="Women"
+                aria-label="SKU: Light beige NY monogram cropped quarter-zip">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Light beige NY monogram cropped quarter-zip</span>
+                  <span class="tooltip-sku">3FMTM0264 · 50SAL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:53%; top:44%; width:20%; height:32%;"
+                data-sku="3FWPB0964 · 14BRD" data-name="Dark brown oversized cargo trousers" data-role="Women"
+                aria-label="SKU: Dark brown oversized cargo trousers">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Dark brown oversized cargo trousers</span>
+                  <span class="tooltip-sku">3FWPB0964 · 14BRD</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:74%; top:42%; width:12%; height:16%;"
+                data-sku="3ABQBQ16N · 43CRS" data-name="Cream ivory quilted B hobo bag" data-role="Women"
+                aria-label="SKU: Cream ivory quilted B hobo bag">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Cream ivory quilted B hobo bag</span>
+                  <span class="tooltip-sku">3ABQBQ16N · 43CRS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:55%; top:78%; width:18%; height:16%;"
+                data-sku="3ACVOL26N · 50CRS" data-name="Cream NY monogram sneakers (gum sole)" data-role="Women"
+                aria-label="SKU: Cream NY monogram sneakers (gum sole)">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Cream NY monogram sneakers (gum sole)</span>
+                  <span class="tooltip-sku">3ACVOL26N · 50CRS</span>
+                </span>
+              </button>
+
+              <!-- MEN (left) — masks on apparel; SKU tooltip on the left -->
+              <button type="button" class="hotspot" style="left:28%; top:2%; width:14%; height:11%;"
+                data-sku="3ABNBM266 · 50CRD" data-name="Cream ribbed NY beanie" data-role="Men"
+                aria-label="SKU: Cream ribbed NY beanie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Cream ribbed NY beanie</span>
+                  <span class="tooltip-sku">3ABNBM266 · 50CRD</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:22%; top:14%; width:26%; height:18%;"
+                data-sku="3ATRM0364 · 07MGS" data-name="Grey heather LA zip hoodie (worn half-open)" data-role="Men"
+                aria-label="SKU: Grey heather LA zip hoodie (worn half-open)">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Grey heather LA zip hoodie (worn half-open)</span>
+                  <span class="tooltip-sku">3ATRM0364 · 07MGS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:24%; top:28%; width:22%; height:16%;"
+                data-sku="3AMTM0964 · 07NYP" data-name="Navy LA monogram crewneck" data-role="Men"
+                aria-label="SKU: Navy LA monogram crewneck">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Navy LA monogram crewneck</span>
+                  <span class="tooltip-sku">3AMTM0964 · 07NYP</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:24%; top:48%; width:22%; height:30%;"
+                data-sku="3AWPV0464 · 50BKS" data-name="Black wide-leg NY drawstring trousers" data-role="Men"
+                aria-label="SKU: Black wide-leg NY drawstring trousers">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Black wide-leg NY drawstring trousers</span>
+                  <span class="tooltip-sku">3AWPV0464 · 50BKS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:28%; top:82%; width:16%; height:12%;"
+                data-sku="3ASXL206N · 50NYS" data-name="Navy NY monogram platform sneakers" data-role="Men"
+                aria-label="SKU: Navy NY monogram platform sneakers">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Men</span>
+                  <span class="tooltip-name">Navy NY monogram platform sneakers</span>
+                  <span class="tooltip-sku">3ASXL206N · 50NYS</span>
+                </span>
+              </button>
+            </div>
+            </div>
+            <p class="hint">Hover or focus apparel to reveal SKU</p>
+
+            <div class="sku-block">
+              <h3><span class="role-pill">W</span> Women · right</h3>
+              <p class="sku-note">By category · SKU first for store follow-up</p>
+              <table class="sku-table">
+                <thead>
+                  <tr><th>Category</th><th class="sku-col">SKU</th><th>Item</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="cat">Top</td><td class="sku-col"><code>3FMTM0264 · 50SAL</code></td><td>Light beige NY monogram cropped quarter-zip</td></tr>
+                  <tr><td class="cat">Bottom</td><td class="sku-col"><code>3FWPB0964 · 14BRD</code></td><td>Dark brown oversized cargo trousers</td></tr>
+                  <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ACPB2766 · 50BGS</code></td><td>Biscuit beige suede NY baseball cap</td></tr>
+                  <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ACVOL26N · 50CRS</code></td><td>Cream NY monogram sneakers (gum sole)</td></tr>
+                  <tr><td class="cat">Bag</td><td class="sku-col"><code>3ABQBQ16N · 43CRS</code></td><td>Cream ivory quilted B hobo bag</td></tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="sku-block">
+              <h3><span class="role-pill m">M</span> Men · left</h3>
+              <p class="sku-note">By category · SKU first for store follow-up</p>
+              <table class="sku-table">
+                <thead>
+                  <tr><th>Category</th><th class="sku-col">SKU</th><th>Item</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="cat">Outer</td><td class="sku-col"><code>3ATRM0364 · 07MGS</code></td><td>Grey heather LA zip hoodie (worn half-open)</td></tr>
+                  <tr><td class="cat">Top</td><td class="sku-col"><code>3AMTM0964 · 07NYP</code></td><td>Navy LA monogram crewneck</td></tr>
+                  <tr><td class="cat">Bottom</td><td class="sku-col"><code>3AWPV0464 · 50BKS</code></td><td>Black wide-leg NY drawstring trousers</td></tr>
+                  <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ABNBM266 · 50CRD</code></td><td>Cream ribbed NY beanie</td></tr>
+                  <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ASXL206N · 50NYS</code></td><td>Navy NY monogram platform sneakers</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+
+          <!-- THIRD -->
+          <article class="panel" role="tabpanel" id="third-mannequin" hidden
+            aria-labelledby="tab-third">
+          <div class="panel-head">
+            <h2>Third Mannequin</h2>
+            <span class="panel-badge live">Locked · women only</span>
+          </div>
+          <div class="panel-body">
+            <div class="stage-wrap">
+            <div class="hotspot-stage" id="third-stage" aria-label="Third women mannequin with SKU hotspots">
+              <img src="third-women-mannequin.jpg" alt="Third mannequin: single women figure with pink hoodie, black NY vest, cream pants, headphones, tan B bag — white background" width="768" height="1024" />
+
+              <!-- WOMEN (solo, centered) — masks on apparel -->
+              <button type="button" class="hotspot" style="left:42%; top:2%; width:16%; height:10%;"
+                data-sku="3ACPB126N · 50CRS" data-name="Cream dusty-rose NY baseball cap" data-role="Women"
+                aria-label="SKU: Cream dusty-rose NY baseball cap">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Cream dusty-rose NY baseball cap</span>
+                  <span class="tooltip-sku">3ACPB126N · 50CRS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:35%; top:12%; width:30%; height:22%;"
+                data-sku="3FTRV0366 · 10COL" data-name="Pink cropped Phillies dual-zip hoodie (partially unzipped)" data-role="Women"
+                aria-label="SKU: Pink cropped Phillies dual-zip hoodie (partially unzipped)">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Pink cropped Phillies dual-zip hoodie (partially unzipped)</span>
+                  <span class="tooltip-sku">3FTRV0366 · 10COL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:42%; top:26%; width:16%; height:12%;"
+                data-sku="3FTOB0164 · 07BKS" data-name="Black cropped NY vest (inner layer)" data-role="Women"
+                aria-label="SKU: Black cropped NY vest (inner layer)">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Black cropped NY vest (inner layer)</span>
+                  <span class="tooltip-sku">3FTOB0164 · 07BKS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:36%; top:42%; width:28%; height:34%;"
+                data-sku="3FPTV0564 · 50CRS" data-name="Cream flare NY pull-on pants" data-role="Women"
+                aria-label="SKU: Cream flare NY pull-on pants">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Cream flare NY pull-on pants</span>
+                  <span class="tooltip-sku">3FPTV0564 · 50CRS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:58%; top:50%; width:16%; height:18%;"
+                data-sku="3ABQVB26N · 43BGM" data-name="Tan Boston B studded crescent bag" data-role="Women"
+                aria-label="SKU: Tan Boston B studded crescent bag">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Tan Boston B studded crescent bag</span>
+                  <span class="tooltip-sku">3ABQVB26N · 43BGM</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:64%; top:58%; width:10%; height:10%;"
+                data-sku="3AETMR16N · 50PKL" data-name="Pink NY rabbit plush keyring (heart clasp)" data-role="Women"
+                aria-label="SKU: Pink NY rabbit plush keyring (heart clasp)">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Pink NY rabbit plush keyring (heart clasp)</span>
+                  <span class="tooltip-sku">3AETMR16N · 50PKL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:38%; top:80%; width:24%; height:14%;"
+                data-sku="3ACVS026N · 50BRS" data-name="Brown suede NY fold-over-tongue sneakers" data-role="Women"
+                aria-label="SKU: Brown suede NY fold-over-tongue sneakers">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">Women</span>
+                  <span class="tooltip-name">Brown suede NY fold-over-tongue sneakers</span>
+                  <span class="tooltip-sku">3ACVS026N · 50BRS</span>
+                </span>
+              </button>
+            </div>
+            </div>
+            <p class="hint">Hover or focus apparel to reveal SKU</p>
+
+            <div class="sku-block">
+              <h3><span class="role-pill">W</span> Women · solo</h3>
+              <p class="sku-note">By category · SKU first for store follow-up</p>
+              <table class="sku-table">
+                <thead>
+                  <tr><th>Category</th><th class="sku-col">SKU</th><th>Item</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td class="cat">Top</td><td class="sku-col"><code>3FTRV0366 · 10COL</code></td><td>Pink cropped Phillies dual-zip hoodie (partially unzipped)</td></tr>
+                  <tr><td class="cat">Inner</td><td class="sku-col"><code>3FTOB0164 · 07BKS</code></td><td>Black cropped NY vest (inner layer)</td></tr>
+                  <tr><td class="cat">Bottom</td><td class="sku-col"><code>3FPTV0564 · 50CRS</code></td><td>Cream flare NY pull-on pants</td></tr>
+                  <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ACPB126N · 50CRS</code></td><td>Cream dusty-rose NY baseball cap</td></tr>
+                  <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ACVS026N · 50BRS</code></td><td>Brown suede NY fold-over-tongue sneakers</td></tr>
+                  <tr><td class="cat">Bag</td><td class="sku-col"><code>3ABQVB26N · 43BGM</code></td><td>Tan Boston B studded crescent bag</td></tr>
+                  <tr><td class="cat">Keyring</td><td class="sku-col"><code>3AETMR16N · 50PKL</code></td><td>Pink NY rabbit plush keyring (heart clasp)</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- DP table setting -->
+    <section class="dp-band" id="dp-setting" aria-labelledby="dp-heading">
+      <div class="dp-band-head">
+        <h2 id="dp-heading">DP table setting</h2>
+        <p>Overall look · Type I big DP + small round DP locked</p>
+      </div>
+      <div class="store-grid stack">
+        <div class="store-block store-block-primary" id="overall-look">
+          <div class="store-title">Overall look · Main MNQ + DP</div>
+          <div class="store-meta"><span class="panel-badge live">Locked</span> · Main mannequin pair with small round DP table setting</div>
+
+          <div class="stage-wrap">
+            <div class="hotspot-stage" id="overall-stage" aria-label="Overall look: Main mannequin pair with small round DP table">
+              <img src="main-mnq-dp-overall.jpg" alt="Overall look — Main mannequin pair with small round DP table: men left full-back black MLB hoodie and grey NY cap; women right light-blue fur-hood hoodie, grey ribbon meow beanie, black skirt; filled blue round DP with 07SBL sneakers, grey and cream meow heads, brown NY bag and blue LA bag on T-stand" width="1152" height="864" />
+            </div>
+          </div>
+          <p class="stage-caption" style="margin-top:12px;font-size:0.85rem;color:var(--birdhouse-brown);">Main mannequin pair with small round DP table setting</p>
+        </div>
+
+        <div class="store-block store-block-primary">
+          <div class="store-title">Type I · Big DP table</div>
+          <div class="store-meta"><span class="panel-badge live">Locked</span> · back beanies · left bags · mid hoodies · front shoes</div>
+
+          <div class="stage-wrap">
+            <div class="hotspot-stage" id="type-i-stage" aria-label="Type I big DP table with SKU hotspots">
+              <img src="type-i-big-dp-table.jpg" alt="Type I big DP table: beanies on head stands, sherpa bags, folded fur-hood hoodies, three pairs of sneakers" width="1152" height="880" />
+
+              <!-- Headwear — back -->
+              <button type="button" class="hotspot" style="left:36%; top:6%; width:12%; height:16%;"
+                data-sku="3ABNB0866 · 07GRP" data-name="Grey ribbon meow beanie (LA)" data-role="DP"
+                aria-label="SKU: Grey ribbon meow beanie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip above">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Grey ribbon meow beanie (LA)</span>
+                  <span class="tooltip-sku">3ABNB0866 · 07GRP</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:50%; top:6%; width:12%; height:16%;"
+                data-sku="3ABNB0866 · 07CRS" data-name="Cream ribbon meow beanie" data-role="DP"
+                aria-label="SKU: Cream ribbon meow beanie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip above">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Cream ribbon meow beanie</span>
+                  <span class="tooltip-sku">3ABNB0866 · 07CRS</span>
+                </span>
+              </button>
+
+              <!-- Bags — left -->
+              <button type="button" class="hotspot" style="left:16%; top:4%; width:14%; height:22%;"
+                data-sku="3ACRBB16N · 07LBL" data-name="Light blue LA sherpa boa bag (hung on stand)" data-role="DP"
+                aria-label="SKU: Light blue LA sherpa boa bag">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Light blue LA sherpa boa bag (hung on stand)</span>
+                  <span class="tooltip-sku">3ACRBB16N · 07LBL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:20%; top:28%; width:15%; height:16%;"
+                data-sku="3ACRBB16N · 50BRD" data-name="Brown NY sherpa boa bag" data-role="DP"
+                aria-label="SKU: Brown NY sherpa boa bag">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip left">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Brown NY sherpa boa bag</span>
+                  <span class="tooltip-sku">3ACRBB16N · 50BRD</span>
+                </span>
+              </button>
+
+              <!-- Tops — mid -->
+              <button type="button" class="hotspot" style="left:38%; top:28%; width:18%; height:20%;"
+                data-sku="3FTRB0366 · 07LBL" data-name="Dusty-blue Dodgers fur-hood zip hoodie" data-role="DP"
+                aria-label="SKU: Dusty-blue Dodgers fur-hood zip hoodie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip below">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Dusty-blue Dodgers fur-hood zip hoodie</span>
+                  <span class="tooltip-sku">3FTRB0366 · 07LBL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:60%; top:28%; width:18%; height:20%;"
+                data-sku="3FTRB0366 · 50CRS" data-name="Cream Yankees fur-hood zip hoodie" data-role="DP"
+                aria-label="SKU: Cream Yankees fur-hood zip hoodie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Cream Yankees fur-hood zip hoodie</span>
+                  <span class="tooltip-sku">3FTRB0366 · 50CRS</span>
+                </span>
+              </button>
+
+              <!-- Footwear — front -->
+              <button type="button" class="hotspot" style="left:22%; top:52%; width:16%; height:14%;"
+                data-sku="3ASXS016N · 07SBL" data-name="Cream dusty-blue LA fold-tongue sneakers" data-role="DP"
+                aria-label="SKU: Cream dusty-blue LA fold-tongue sneakers">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip below">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Cream dusty-blue LA fold-tongue sneakers</span>
+                  <span class="tooltip-sku">3ASXS016N · 07SBL</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:42%; top:52%; width:16%; height:14%;"
+                data-sku="3ASXS026N · 50WHS" data-name="Cream NY sneakers with home-plate top flap" data-role="DP"
+                aria-label="SKU: Cream NY sneakers with home-plate top flap">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip below">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Cream NY sneakers with home-plate top flap</span>
+                  <span class="tooltip-sku">3ASXS026N · 50WHS</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:62%; top:52%; width:16%; height:14%;"
+                data-sku="3ASXS016N · 43BGS" data-name="Cream Boston B fold-tongue sneakers" data-role="DP"
+                aria-label="SKU: Cream Boston B fold-tongue sneakers">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip below">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Cream Boston B fold-tongue sneakers</span>
+                  <span class="tooltip-sku">3ASXS016N · 43BGS</span>
+                </span>
+              </button>
+            </div>
+          </div>
+          <p class="hint">Hover or focus items to reveal SKU · back beanies · left bags · mid hoodies · front shoes</p>
+
+          <div class="sku-block">
+            <h3><span class="role-pill">DP</span> Type I · Big DP table</h3>
+            <p class="sku-note">By category · SKU first for store follow-up</p>
+            <table class="sku-table">
+              <thead>
+                <tr><th>Category</th><th class="sku-col">SKU</th><th>Item</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ABNB0866 · 07GRP</code></td><td>Grey ribbon meow beanie (LA) · left head stand</td></tr>
+                <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ABNB0866 · 07CRS</code></td><td>Cream ribbon meow beanie · right head stand</td></tr>
+                <tr><td class="cat">Bag</td><td class="sku-col"><code>3ACRBB16N · 07LBL</code></td><td>Light blue LA sherpa boa bag · hung on T-stand</td></tr>
+                <tr><td class="cat">Bag</td><td class="sku-col"><code>3ACRBB16N · 50BRD</code></td><td>Brown NY sherpa boa bag · on table</td></tr>
+                <tr><td class="cat">Top</td><td class="sku-col"><code>3FTRB0366 · 07LBL</code></td><td>Dusty-blue Dodgers fur-hood zip hoodie · folded 1pc</td></tr>
+                <tr><td class="cat">Top</td><td class="sku-col"><code>3FTRB0366 · 50CRS</code></td><td>Cream Yankees fur-hood zip hoodie · folded 1pc</td></tr>
+                <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ASXS016N · 07SBL</code></td><td>Cream dusty-blue LA fold-tongue sneakers · left</td></tr>
+                <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ASXS026N · 50WHS</code></td><td>Cream NY sneakers with home-plate top flap · center</td></tr>
+                <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ASXS016N · 43BGS</code></td><td>Cream Boston B fold-tongue sneakers · right</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="store-block store-block-primary" id="small-round-dp">
+          <div class="store-title">Small round DP</div>
+          <div class="store-meta"><span class="panel-badge live">Locked</span> · blue acrylic · 2 meow beanies · 07SBL · blue hang / brown sit bags</div>
+
+          <div class="stage-wrap">
+            <div class="hotspot-stage" id="small-round-stage" aria-label="Small round DP table with SKU hotspots">
+              <img src="small-round-dp-table.jpg" alt="Small round DP table: cream dusty-blue LA sneakers, grey and cream meow beanies on head stands, brown NY sherpa bag on table, light blue LA sherpa bag hung on T-stand" width="1152" height="864" />
+
+              <!-- Footwear — left -->
+              <button type="button" class="hotspot" style="left:14%; top:48%; width:18%; height:22%;"
+                data-sku="3ASXS016N · 07SBL" data-name="Cream dusty-blue LA fold-tongue sneakers (pair)" data-role="DP"
+                aria-label="SKU: Cream dusty-blue LA fold-tongue sneakers">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip below">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Cream dusty-blue LA fold-tongue sneakers (pair)</span>
+                  <span class="tooltip-sku">3ASXS016N · 07SBL</span>
+                </span>
+              </button>
+
+              <!-- Headwear — center -->
+              <button type="button" class="hotspot" style="left:34%; top:18%; width:12%; height:22%;"
+                data-sku="3ABNB0866 · 07GRP" data-name="Grey ribbon meow beanie (LA)" data-role="DP"
+                aria-label="SKU: Grey ribbon meow beanie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip above">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Grey ribbon meow beanie (LA)</span>
+                  <span class="tooltip-sku">3ABNB0866 · 07GRP</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:48%; top:18%; width:12%; height:22%;"
+                data-sku="3ABNB0866 · 07CRS" data-name="Cream ribbon meow beanie (LA)" data-role="DP"
+                aria-label="SKU: Cream ribbon meow beanie">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip above">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Cream ribbon meow beanie (LA)</span>
+                  <span class="tooltip-sku">3ABNB0866 · 07CRS</span>
+                </span>
+              </button>
+
+              <!-- Bags — right -->
+              <button type="button" class="hotspot" style="left:62%; top:42%; width:16%; height:22%;"
+                data-sku="3ACRBB16N · 50BRD" data-name="Brown NY sherpa boa bag" data-role="DP"
+                aria-label="SKU: Brown NY sherpa boa bag">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip below">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Brown NY sherpa boa bag</span>
+                  <span class="tooltip-sku">3ACRBB16N · 50BRD</span>
+                </span>
+              </button>
+
+              <button type="button" class="hotspot" style="left:78%; top:12%; width:14%; height:36%;"
+                data-sku="3ACRBB16N · 07LBL" data-name="Light blue LA sherpa boa bag (hung on T-stand)" data-role="DP"
+                aria-label="SKU: Light blue LA sherpa boa bag">
+                <span class="hotspot-dot" aria-hidden="true"></span>
+                <span class="tooltip right">
+                  <span class="tooltip-role">DP</span>
+                  <span class="tooltip-name">Light blue LA sherpa boa bag (hung on T-stand)</span>
+                  <span class="tooltip-sku">3ACRBB16N · 07LBL</span>
+                </span>
+              </button>
+            </div>
+          </div>
+          <p class="hint">Hover or focus items to reveal SKU · left shoes · center beanies · right bags</p>
+
+          <div class="sku-block">
+            <h3><span class="role-pill">DP</span> Small round DP</h3>
+            <p class="sku-note">By category · SKU first for store follow-up</p>
+            <table class="sku-table">
+              <thead>
+                <tr><th>Category</th><th class="sku-col">SKU</th><th>Item</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ABNB0866 · 07GRP</code></td><td>Grey ribbon meow beanie (LA) · left head stand</td></tr>
+                <tr><td class="cat">Headwear</td><td class="sku-col"><code>3ABNB0866 · 07CRS</code></td><td>Cream ribbon meow beanie (LA) · right head stand</td></tr>
+                <tr><td class="cat">Bag</td><td class="sku-col"><code>3ACRBB16N · 50BRD</code></td><td>Brown NY sherpa boa bag · on table</td></tr>
+                <tr><td class="cat">Bag</td><td class="sku-col"><code>3ACRBB16N · 07LBL</code></td><td>Light blue LA sherpa boa bag · hung on T-stand</td></tr>
+                <tr><td class="cat">Footwear</td><td class="sku-col"><code>3ASXS016N · 07SBL</code></td><td>Cream dusty-blue LA fold-tongue sneakers · pair left</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <p class="footer-note">
+      Self-contained guideline · images <code>main-mannequin-pair.jpg</code> · <code>sub-mannequin-pair.jpg</code> · <code>third-women-mannequin.jpg</code> · <code>type-i-big-dp-table.jpg</code> · <code>small-round-dp-table.jpg</code> · <code>main-mnq-dp-overall.jpg</code>
+    </p>
+  </main>
+
+  <script>
+    (function () {
+      var TAB_IDS = ["main-mannequin", "sub-mannequin", "third-mannequin"];
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('[role="tab"]'));
+      var panels = TAB_IDS.map(function (id) { return document.getElementById(id); });
+      var appSection = document.getElementById("application");
+
+      function activateTab(panelId, opts) {
+        opts = opts || {};
+        if (TAB_IDS.indexOf(panelId) === -1) return;
+        tabs.forEach(function (tab) {
+          var selected = tab.getAttribute("aria-controls") === panelId;
+          tab.setAttribute("aria-selected", selected ? "true" : "false");
+          tab.tabIndex = selected ? 0 : -1;
+        });
+        panels.forEach(function (panel) {
+          if (!panel) return;
+          if (panel.id === panelId) {
+            panel.removeAttribute("hidden");
+          } else {
+            panel.setAttribute("hidden", "");
+          }
+        });
+        if (opts.updateHash) {
+          if (history.replaceState) {
+            history.replaceState(null, "", "#" + panelId);
+          } else {
+            location.hash = panelId;
+          }
+        }
+        if (opts.scroll && appSection) {
+          appSection.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }
+
+      function panelIdFromHash() {
+        var h = (location.hash || "").replace(/^#/, "");
+        if (TAB_IDS.indexOf(h) !== -1) return h;
+        return null;
+      }
+
+      tabs.forEach(function (tab) {
+        tab.addEventListener("click", function () {
+          activateTab(tab.getAttribute("aria-controls"), { updateHash: true });
+        });
+        tab.addEventListener("keydown", function (e) {
+          var i = tabs.indexOf(tab);
+          var next = -1;
+          if (e.key === "ArrowRight" || e.key === "ArrowDown") next = (i + 1) % tabs.length;
+          if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = (i - 1 + tabs.length) % tabs.length;
+          if (e.key === "Home") next = 0;
+          if (e.key === "End") next = tabs.length - 1;
+          if (next >= 0) {
+            e.preventDefault();
+            tabs[next].focus();
+            activateTab(tabs[next].getAttribute("aria-controls"), { updateHash: true });
+          }
+        });
+      });
+
+      // Nav chips + overview cards → switch tab + scroll to Application
+      document.querySelectorAll('a[href="#main-mannequin"], a[href="#sub-mannequin"], a[href="#third-mannequin"]').forEach(function (a) {
+        a.addEventListener("click", function (e) {
+          var id = a.getAttribute("href").slice(1);
+          e.preventDefault();
+          activateTab(id, { updateHash: true, scroll: true });
+        });
+      });
+
+      window.addEventListener("hashchange", function () {
+        var id = panelIdFromHash();
+        if (id) activateTab(id, { scroll: true });
+      });
+
+      // Initial: hash or default Main
+      var initial = panelIdFromHash() || "main-mannequin";
+      activateTab(initial, { scroll: !!panelIdFromHash() });
+
+      // Keyboard: Escape blurs hotspot
+      document.querySelectorAll(".hotspot").forEach(function (el) {
+        el.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") el.blur();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>
