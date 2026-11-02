@@ -882,6 +882,10 @@
       font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; color: var(--white);
       background: #c0392b; padding: 2px 6px; border-radius: 999px; margin-left: 4px; vertical-align: 1px;
     }
+    .note-tag {
+      font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; color: var(--birdhouse-brown);
+      background: var(--modest-white); padding: 2px 6px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; white-space: nowrap;
+    }
     @media (max-width: 760px) { .notes-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -968,6 +972,57 @@
         sub:   { status: "soon" },
         third: { status: "soon" }
       }
+    },
+    {
+      id: "m11-m14",
+      label: "M11 / M14",
+      stores: "M11 · M14",
+      mannequins: {
+        main: {
+          status: "live",
+          badge: "Locked pair",
+          image: "m11-m14-main-pair.jpg",
+          imageW: 1152, imageH: 864,
+          alt: "Main mannequin pair for M11 / M14: men left in brown SF Giants pink bear sweatshirt over a white oversized tee, black NY pants, cream corduroy NY cap and silver/cream chunky NY sneakers; women right in pink stripe double-zip hoodie, ivory wide jeans, cream LA cat-ear trapper beanie, brown quilted B bag with pink cat keyring and tan NY sneakers",
+          figures: [
+            {
+              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
+              items: [
+                { cat: "Top",      sku: "3AMTE0164-14BRD", name: "Brown SF Giants pink bear sweatshirt", box: [24.6, 16.3, 23.3, 34.5] },
+                { cat: "Inner",    sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below sweatshirt)", box: [28.1, 48.2, 14.5, 3.0] },
+                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
+                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
+                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [23.7, 88.5, 19.4, 9.2] }
+              ],
+              notes: [
+                ["Layering", "No jacket and no bandana · oversized SF Giants sweatshirt is the hero piece"],
+                ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the sweatshirt"],
+                ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the sneakers, covering ~1/3 of the shoe"]
+              ]
+            },
+            {
+              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
+              items: [
+                { cat: "Top",      sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 19.3, 18.2, 31] },
+                { cat: "Bottom",   sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.7, 44.8, 18.4, 45] },
+                { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9.0, 18] },
+                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.4, 52.7, 9.0, 16.8] },
+                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.7, 59.4, 3.9, 12] },
+                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 89.6, 16.6, 7.8] }
+              ],
+              notes: [
+                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button so the waistline shows"],
+                ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
+                ["Bag", "Brown quilted B mini hobo hand-carried in the outer (right) hand"],
+                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+                ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan NY sneakers"]
+              ]
+            }
+          ]
+        },
+        sub:   { status: "soon" },
+        third: { status: "soon" }
+      }
     }
     /* , { id: "next-group", label: "Mxx / Myy", stores: "...", mannequins: { main: {...}, sub: {status:"soon"}, third: {status:"soon"} } } */
   ];
@@ -985,9 +1040,10 @@
         return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
       });
     }
-    function skuText(it) { return it.color ? it.sku + " · color " + it.color : it.sku; }
+    function skuText(it) { return it.color ? it.sku + " · color " + it.color : (it.note ? it.sku + " · " + it.note : it.sku); }
     function skuHtml(it) {
-      return "<code>" + esc(it.sku) + "</code>" + (it.color ? '<span class="tbc">Color ' + esc(it.color) + "</span>" : "");
+      return "<code>" + esc(it.sku) + "</code>" + (it.color ? '<span class="tbc">Color ' + esc(it.color) + "</span>" : "") +
+        (it.note ? '<span class="note-tag">' + esc(it.note) + "</span>" : "");
     }
 
     function hotspot(fig, it) {
