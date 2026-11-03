@@ -886,11 +886,10 @@
       font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; color: var(--birdhouse-brown);
       background: var(--modest-white); padding: 2px 6px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; white-space: nowrap;
     }
-    .store-note {
-      margin-top: 12px; font-size: 0.8rem; color: var(--brownish-black); background: var(--modest-white);
-      border-left: 4px solid var(--city-hunter-blue); border-radius: var(--radius-md); padding: 10px 14px;
+    .same-set {
+      margin: 0; padding: 10px 22px 0; font-size: 0.78rem; font-weight: 600; color: var(--birdhouse-brown);
     }
-    .store-note a { color: var(--city-hunter-blue); font-weight: 600; margin-left: 4px; }
+    .tab-list[hidden] { display: none !important; }
     @media (max-width: 760px) { .notes-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -906,12 +905,12 @@
     <header class="hero-band" id="top">
       <div class="hero-kicker">Visual Merchandising</div>
       <h1 class="hero-title">NOV 1st DP guideline</h1>
-      <p class="hero-sub">Organised by store group · each group carries its own assortment · hover mannequins for SKU</p>
+      <p class="hero-sub">Organised by store · MAIN / SUB / 3RD mannequins per store · hover mannequins for SKU</p>
     </header>
 
-    <section id="application" aria-label="Mannequin application by store group">
-      <div class="section-label">Store groups</div>
-      <div class="group-list" role="tablist" aria-label="Store groups" id="group-list"></div>
+    <section id="application" aria-label="Mannequin application by store">
+      <div class="section-label">Stores</div>
+      <div class="group-list" role="tablist" aria-label="Stores" id="group-list"></div>
       <div id="group-panels"></div>
     </section>
 
@@ -920,751 +919,671 @@
 
   <script>
   /* ================================================================
-     DATA — one entry per store group. To add a store group, append an
-     object to STORE_GROUPS (id, label, stores, mannequins). Each
-     mannequin is either { status: "soon" } or a live look with an
-     image + figures (items carry hotspot boxes in % of the image).
+     DATA — organised BY STORE.
+     LOOKS holds every mannequin set exactly once (image + figures; items
+     carry hotspot boxes in % of the image). STORES lists one tab per
+     store; each slot references a LOOKS key, or "soon" for a pending
+     look. Stores with a single set only list "main" (no sub-tab bar).
      ================================================================ */
-  var STORE_GROUPS = [
-    {
-      id: "m10-m18-mc1",
-      label: "M10 / M18 / MC1",
-      stores: "M10 · M18 · MC1",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "m10-m18-mc1-main-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for M10 / M18 / MC1: men left in brown/cream Red Sox varsity bomber, grey crewneck, black NY pants, grey NY cap, paisley bandana and cream sneakers; women right in pink stripe double-zip hoodie, cream LA wide jeans, cream bunny-ear beanie, brown quilted B mini hobo with pink cat keyring and tan chunky sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3AJPV0364-43BRD", name: "Brown/cream Red Sox varsity bomber", box: [25.7, 14.6, 22.2, 36] },
-                { cat: "Top",      sku: "3AMTB0166-46MGS", name: "Heather grey crewneck sweater (inner)", box: [31.4, 17.6, 8.1, 28.6] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [28.1, 51, 16, 37] },
-                { cat: "Headwear", sku: "3ACPB0266-50GRL", name: "Grey NY corduroy cap", box: [31.4, 3.2, 7.8, 7.2] },
-                { cat: "Accessory",sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27.1, 47.5, 5.6, 18.2] },
-                { cat: "Footwear", sku: "3ARNWR46N-50WHS", name: "Cream NY sneakers", box: [25.2, 87.9, 17.6, 8.5] }
-              ],
-              notes: [
-                ["Jacket", "Varsity bomber worn open so the grey crewneck shows down the front"],
-                ["Sweater", "Heather grey crewneck as inner layer — chest logo is hidden behind the open bomber"],
-                ["Bandana", "White LA paisley bandana folded into a triangle and tied on the left belt loop"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants with a relaxed break over cream sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 18.5, 17.6, 24.5] },
-                { cat: "Bottom",   sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.9, 43, 17.9, 45] },
-                { cat: "Headwear", sku: "3ABNB0766-07CRS", name: "Cream LA bunny-ear beanie", box: [59.1, 4.5, 9.8, 15.5] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.2, 51.8, 8.8, 16.5] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.4, 59.5, 4.4, 11.5] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 88.5, 16.3, 7.8] }
-              ],
-              notes: [
-                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to the waist"],
-                ["Bag", "Brown quilted B mini hobo carried in the right hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan chunky sneakers"]
-              ]
-            }
+  var LOOKS = {
+    "main-m10-m18-mc1": {
+      set: "M10 · M18 · MC1",
+      status: "live",
+      badge: "Locked pair",
+      image: "m10-m18-mc1-main-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for M10 / M18 / MC1: men left in brown/cream Red Sox varsity bomber, grey crewneck, black NY pants, grey NY cap, paisley bandana and cream sneakers; women right in pink stripe double-zip hoodie, cream LA wide jeans, cream bunny-ear beanie, brown quilted B mini hobo with pink cat keyring and tan chunky sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Outer", sku: "3AJPV0364-43BRD", name: "Brown/cream Red Sox varsity bomber", box: [25.7, 14.6, 22.2, 36] },
+            { cat: "Top", sku: "3AMTB0166-46MGS", name: "Heather grey crewneck sweater (inner)", box: [31.4, 17.6, 8.1, 28.6] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [28.1, 51, 16, 37] },
+            { cat: "Headwear", sku: "3ACPB0266-50GRL", name: "Grey NY corduroy cap", box: [31.4, 3.2, 7.8, 7.2] },
+            { cat: "Accessory", sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27.1, 47.5, 5.6, 18.2] },
+            { cat: "Footwear", sku: "3ARNWR46N-50WHS", name: "Cream NY sneakers", box: [25.2, 87.9, 17.6, 8.5] }
+          ],
+          notes: [
+            ["Jacket", "Varsity bomber worn open so the grey crewneck shows down the front"],
+            ["Sweater", "Heather grey crewneck as inner layer — chest logo is hidden behind the open bomber"],
+            ["Bandana", "White LA paisley bandana folded into a triangle and tied on the left belt loop"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants with a relaxed break over cream sneakers"]
           ]
         },
-        sub: {
-          status: "live",
-          badge: "Locked pair",
-          image: "sub-m10-m18-mc1-mc3-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Sub mannequin pair for M10 / M18 / MC1: men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
-                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
-                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
-                { cat: "Headwear", sku: "3ABNBM266-50SPS", name: "Brown NY cuff beanie", box: [32.0, 3.3, 7.0, 9.8] },
-                { cat: "Footwear", sku: "3ASXS016N-07SBL", name: "Rookie Liner LA court sneakers (cream / blue LA)", box: [25.2, 90.5, 20.2, 7.3] }
-              ],
-              notes: [
-                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
-                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
-                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
-                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
-                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
-                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
-                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
-                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
-                { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers", box: [60.1, 88.5, 9.5, 9.4] }
-              ],
-              notes: [
-                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
-                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
-                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
-                ["Socks", "Grey plush high socks pulled up to just below the knee"],
-                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
-              ]
-            }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 18.5, 17.6, 24.5] },
+            { cat: "Bottom", sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.9, 43, 17.9, 45] },
+            { cat: "Headwear", sku: "3ABNB0766-07CRS", name: "Cream LA bunny-ear beanie", box: [59.1, 4.5, 9.8, 15.5] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.2, 51.8, 8.8, 16.5] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.4, 59.5, 4.4, 11.5] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 88.5, 16.3, 7.8] }
+          ],
+          notes: [
+            ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to the waist"],
+            ["Bag", "Brown quilted B mini hobo carried in the right hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan chunky sneakers"]
           ]
-        },
-        third: { status: "soon" }
-      }
+        }
+      ]
     },
-    {
-      id: "m11-m14",
-      label: "M11 / M14",
-      stores: "M11 · M14",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "m11-m14-main-pair.jpg?v=2",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for M11 / M14: men left in brown SF Giants pink bear sweatshirt over a white oversized tee, black NY pants, cream corduroy NY cap and silver/cream chunky NY sneakers; women right in pink stripe double-zip hoodie, ivory wide jeans, cream LA cat-ear trapper beanie, brown quilted B bag with pink cat keyring and tan NY sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Top",      sku: "3AMTE0164-14BRD", name: "Brown SF Giants pink bear sweatshirt", box: [24.6, 16.3, 23.3, 34.5] },
-                { cat: "Inner",    sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below sweatshirt)", box: [28.1, 48.2, 14.5, 3.0] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
-                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [23.7, 88.5, 19.4, 9.2] }
-              ],
-              notes: [
-                ["Layering", "No jacket and no bandana · oversized SF Giants sweatshirt is the hero piece"],
-                ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the sweatshirt"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the sneakers, covering ~1/3 of the shoe"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 19.3, 18.2, 31] },
-                { cat: "Bottom",   sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.7, 44.8, 18.4, 45] },
-                { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9.0, 18] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.4, 52.7, 9.0, 16.8] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.7, 59.4, 3.9, 12] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 89.6, 16.6, 7.8] }
-              ],
-              notes: [
-                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button so the waistline shows"],
-                ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
-                ["Bag", "Brown quilted B mini hobo hand-carried in the outer (right) hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan NY sneakers"]
-              ]
-            }
+    "main-m11-m14": {
+      set: "M11 · M14",
+      status: "live",
+      badge: "Locked pair",
+      image: "m11-m14-main-pair.jpg?v=2",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for M11 / M14: men left in brown SF Giants pink bear sweatshirt over a white oversized tee, black NY pants, cream corduroy NY cap and silver/cream chunky NY sneakers; women right in pink stripe double-zip hoodie, ivory wide jeans, cream LA cat-ear trapper beanie, brown quilted B bag with pink cat keyring and tan NY sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Top", sku: "3AMTE0164-14BRD", name: "Brown SF Giants pink bear sweatshirt", box: [24.6, 16.3, 23.3, 34.5] },
+            { cat: "Inner", sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below sweatshirt)", box: [28.1, 48.2, 14.5, 3] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
+            { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [23.7, 88.5, 19.4, 9.2] }
+          ],
+          notes: [
+            ["Layering", "No jacket and no bandana · oversized SF Giants sweatshirt is the hero piece"],
+            ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the sweatshirt"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the sneakers, covering ~1/3 of the shoe"]
           ]
         },
-        sub: {
-          status: "live",
-          badge: "Locked pair",
-          image: "sub-m10-m18-mc1-mc3-pair.jpg",
-          imageW: 1152, imageH: 864,
-          storeNote: "Store split · M14 uses this set as shown (Base Low German shoes). M11 is identical except the women's shoes are 3ACVSP46N-07CRS Sleek Powder Twill.",
-          storeNoteImage: "sub-m02-m05-m11-pair.jpg",
-          alt: "Sub mannequin pair for M11 / M14 (image shows M14): men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
-                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
-                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
-                { cat: "Headwear", sku: "3ABNBM266-50SPS", name: "Brown NY cuff beanie", box: [32.0, 3.3, 7.0, 9.8] },
-                { cat: "Footwear", sku: "3ASXS016N-07SBL", name: "Rookie Liner LA court sneakers (cream / blue LA)", box: [25.2, 90.5, 20.2, 7.3] }
-              ],
-              notes: [
-                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
-                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
-                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
-                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
-                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
-                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
-                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
-                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
-                { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers (M14) · M11 uses Sleek Powder Twill 3ACVSP46N-07CRS", note: "M14", box: [60.1, 88.5, 9.5, 9.4] },
-                { cat: "Footwear", sku: "3ACVSP46N-07CRS", name: "Sleek Powder Twill sneakers (M11 only, replaces Base Low German)", note: "M11", noSpot: true, box: [60.1, 88.5, 9.5, 9.4] }
-              ],
-              notes: [
-                ["Store split", "M14 wears 3ACVBG16N-07BLS Base Low German · M11 swaps to 3ACVSP46N-07CRS Sleek Powder Twill; everything else identical"],
-                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
-                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
-                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
-                ["Socks", "Grey plush high socks pulled up to just below the knee"],
-                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
-              ]
-            }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 19.3, 18.2, 31] },
+            { cat: "Bottom", sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.7, 44.8, 18.4, 45] },
+            { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9, 18] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.4, 52.7, 9, 16.8] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.7, 59.4, 3.9, 12] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 89.6, 16.6, 7.8] }
+          ],
+          notes: [
+            ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button so the waistline shows"],
+            ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
+            ["Bag", "Brown quilted B mini hobo hand-carried in the outer (right) hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan NY sneakers"]
           ]
-        },
-        third: { status: "soon" }
-      }
+        }
+      ]
     },
-    {
-      id: "m01",
-      label: "M01",
-      stores: "M01",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "m01-main-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for M01: men left in brown SF Giants pink bear sweatshirt over a white oversized tee, black NY pants, cream corduroy NY cap and cream NY gum-sole sneakers; women right in pink Phillies double-zip hoodie, ivory wide jeans, cream LA cat-ear trapper beanie, brown quilted B bag with pink cat keyring and tan NY sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Top",      sku: "3AMTE0164-14BRD", name: "Brown SF Giants pink bear sweatshirt", box: [24.6, 16.3, 23.3, 34.5] },
-                { cat: "Inner",    sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below sweatshirt)", box: [28.1, 48.2, 14.5, 3.0] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
-                { cat: "Footwear", sku: "3ARNWR46N-50WHS", name: "Cream NY gum-sole sneakers", box: [22.9, 88.3, 20.0, 9.6] }
-              ],
-              notes: [
-                ["Layering", "No jacket and no bandana · oversized SF Giants sweatshirt is the hero piece"],
-                ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the sweatshirt"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the cream gum-sole sneakers, covering ~1/3 of the shoe"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FTRV0366-10COL", name: "Pink Phillies double-zip hoodie", box: [54.7, 18.6, 18.4, 31] },
-                { cat: "Bottom",   sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.7, 44.8, 18.4, 45] },
-                { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9.0, 18] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.4, 52.7, 9.0, 16.8] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.7, 59.4, 3.9, 12] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 89.6, 16.6, 7.8] }
-              ],
-              notes: [
-                ["Hoodie zips", "Pink Phillies hoodie · top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button so the waistline shows"],
-                ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
-                ["Bag", "Brown quilted B mini hobo hand-carried in the outer (right) hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan NY sneakers"]
-              ]
-            }
+    "main-m01": {
+      set: "M01",
+      status: "live",
+      badge: "Locked pair",
+      image: "m01-main-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for M01: men left in brown SF Giants pink bear sweatshirt over a white oversized tee, black NY pants, cream corduroy NY cap and cream NY gum-sole sneakers; women right in pink Phillies double-zip hoodie, ivory wide jeans, cream LA cat-ear trapper beanie, brown quilted B bag with pink cat keyring and tan NY sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Top", sku: "3AMTE0164-14BRD", name: "Brown SF Giants pink bear sweatshirt", box: [24.6, 16.3, 23.3, 34.5] },
+            { cat: "Inner", sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below sweatshirt)", box: [28.1, 48.2, 14.5, 3] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
+            { cat: "Footwear", sku: "3ARNWR46N-50WHS", name: "Cream NY gum-sole sneakers", box: [22.9, 88.3, 20, 9.6] }
+          ],
+          notes: [
+            ["Layering", "No jacket and no bandana · oversized SF Giants sweatshirt is the hero piece"],
+            ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the sweatshirt"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the cream gum-sole sneakers, covering ~1/3 of the shoe"]
           ]
         },
-        sub: {
-          status: "live",
-          badge: "Locked pair",
-          image: "sub-m10-m18-mc1-mc3-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Sub mannequin pair for M01: men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
-                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
-                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
-                { cat: "Headwear", sku: "3ABNBM266-50SPS", name: "Brown NY cuff beanie", box: [32.0, 3.3, 7.0, 9.8] },
-                { cat: "Footwear", sku: "3ASXS016N-07SBL", name: "Rookie Liner LA court sneakers (cream / blue LA)", box: [25.2, 90.5, 20.2, 7.3] }
-              ],
-              notes: [
-                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
-                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
-                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
-                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
-                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
-                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
-                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
-                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
-                { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers", box: [60.1, 88.5, 9.5, 9.4] }
-              ],
-              notes: [
-                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
-                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
-                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
-                ["Socks", "Grey plush high socks pulled up to just below the knee"],
-                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
-              ]
-            }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FTRV0366-10COL", name: "Pink Phillies double-zip hoodie", box: [54.7, 18.6, 18.4, 31] },
+            { cat: "Bottom", sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.7, 44.8, 18.4, 45] },
+            { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9, 18] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.4, 52.7, 9, 16.8] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.7, 59.4, 3.9, 12] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 89.6, 16.6, 7.8] }
+          ],
+          notes: [
+            ["Hoodie zips", "Pink Phillies hoodie · top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button so the waistline shows"],
+            ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
+            ["Bag", "Brown quilted B mini hobo hand-carried in the outer (right) hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan NY sneakers"]
           ]
-        },
-        third: { status: "soon" }
-      }
+        }
+      ]
     },
-    {
-      id: "m02-m05",
-      label: "M02 / M05",
-      stores: "M02 · M05",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "m02-m05-main-pair.jpg?v=2",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for M02 / M05: men left in open black NY Yankees varsity bomber over a plain brown crewneck, black NY pants, cream NY corduroy cap, white paisley bandana on the belt loop and silver/cream chunky NY sneakers; women right in pink stripe double-zip hoodie, ivory wide jeans, cream LA cat-ear trapper beanie, brown quilted B bag with pink cat keyring and cream/brown Boston B sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3AJPV0264-50BKS", name: "Black NY Yankees varsity bomber", box: [24.9, 14.1, 23.6, 37.4] },
-                { cat: "Top",      sku: "3ATSB0164-13BRD", name: "Brown crewneck (inner)", box: [31.1, 18.2, 6.5, 30] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.8, 48.2, 16.1, 39] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [31.1, 2.0, 8.2, 7.8] },
-                { cat: "Accessory",sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27.0, 48.8, 5.4, 18.2] },
-                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [24.2, 87.2, 19.2, 10.4] }
-              ],
-              notes: [
-                ["Jacket", "Black varsity bomber worn open casually so the brown crewneck shows down the front"],
-                ["Crewneck", "Plain brown crewneck as inner layer, chest logo covered by the open bomber"],
-                ["Bandana", "White LA paisley bandana folded into a triangle and tied through the side belt loop"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 19.3, 18.2, 31] },
-                { cat: "Bottom",   sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.7, 44.8, 18.4, 44] },
-                { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9.0, 18] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.4, 52.7, 9.0, 16.8] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.7, 59.4, 3.9, 12] },
-                { cat: "Footwear", sku: "3ASXS016N-43BGS", name: "Cream/brown Boston B sneakers", box: [54.0, 88.9, 19.2, 9.4] }
-              ],
-              notes: [
-                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button so the waistline shows"],
-                ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
-                ["Bag", "Brown quilted B mini hobo hand-carried in the outer (right) hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · cream LA wide jeans covering ~1/3 of the Boston B sneakers"]
-              ]
-            }
+    "main-m02-m05": {
+      set: "M02 · M05",
+      status: "live",
+      badge: "Locked pair",
+      image: "m02-m05-main-pair.jpg?v=2",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for M02 / M05: men left in open black NY Yankees varsity bomber over a plain brown crewneck, black NY pants, cream NY corduroy cap, white paisley bandana on the belt loop and silver/cream chunky NY sneakers; women right in pink stripe double-zip hoodie, ivory wide jeans, cream LA cat-ear trapper beanie, brown quilted B bag with pink cat keyring and cream/brown Boston B sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Outer", sku: "3AJPV0264-50BKS", name: "Black NY Yankees varsity bomber", box: [24.9, 14.1, 23.6, 37.4] },
+            { cat: "Top", sku: "3ATSB0164-13BRD", name: "Brown crewneck (inner)", box: [31.1, 18.2, 6.5, 30] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.8, 48.2, 16.1, 39] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [31.1, 2, 8.2, 7.8] },
+            { cat: "Accessory", sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27, 48.8, 5.4, 18.2] },
+            { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [24.2, 87.2, 19.2, 10.4] }
+          ],
+          notes: [
+            ["Jacket", "Black varsity bomber worn open casually so the brown crewneck shows down the front"],
+            ["Crewneck", "Plain brown crewneck as inner layer, chest logo covered by the open bomber"],
+            ["Bandana", "White LA paisley bandana folded into a triangle and tied through the side belt loop"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants covering ~1/3 of the sneakers"]
           ]
         },
-        sub: {
-          status: "live",
-          badge: "Locked pair",
-          image: "sub-m02-m05-m11-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Sub mannequin pair for M02 / M05: men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and sleek Powder Twill sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
-                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
-                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
-                { cat: "Headwear", sku: "3ABNBM266-50SPS", name: "Brown NY cuff beanie", box: [32.0, 3.3, 7.0, 9.8] },
-                { cat: "Footwear", sku: "3ASXS016N-07SBL", name: "Rookie Liner LA court sneakers (cream / blue LA)", box: [25.2, 90.5, 20.2, 7.3] }
-              ],
-              notes: [
-                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
-                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
-                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
-                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
-                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
-                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
-                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
-                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
-                { cat: "Footwear", sku: "3ACVSP46N-07CRS", name: "Sleek Powder Twill sneakers", box: [60.1, 88.5, 9.5, 9.4] }
-              ],
-              notes: [
-                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
-                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
-                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
-                ["Socks", "Grey plush high socks pulled up to just below the knee"],
-                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Sleek Powder Twill sneakers"]
-              ]
-            }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 19.3, 18.2, 31] },
+            { cat: "Bottom", sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.7, 44.8, 18.4, 44] },
+            { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9, 18] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.4, 52.7, 9, 16.8] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.7, 59.4, 3.9, 12] },
+            { cat: "Footwear", sku: "3ASXS016N-43BGS", name: "Cream/brown Boston B sneakers", box: [54, 88.9, 19.2, 9.4] }
+          ],
+          notes: [
+            ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button so the waistline shows"],
+            ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
+            ["Bag", "Brown quilted B mini hobo hand-carried in the outer (right) hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · cream LA wide jeans covering ~1/3 of the Boston B sneakers"]
           ]
-        },
-        third: { status: "soon" }
-      }
+        }
+      ]
     },
-    {
-      id: "m16",
-      label: "M16",
-      stores: "M16",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "m16-main-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for M16: men left in brown SF Giants script crewneck over a white oversized tee, black NY pants, cream NY corduroy cap and cream NY chunky runners; women right in pink Phillies double-zip hoodie, cream LA wide jeans, cream LA bunny-ear beanie, brown quilted B mini hobo with pink cat keyring and tan NY chunky sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Top",      sku: "3AMTV0564-14BRD", name: "Brown SF Giants script crewneck", box: [24.6, 16.3, 23.3, 34.5] },
-                { cat: "Inner",    sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below crewneck)", box: [28.1, 48.2, 14.5, 3.0] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
-                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Cream NY chunky runners", box: [22.9, 88.3, 20.0, 9.6] }
-              ],
-              notes: [
-                ["Layering", "No jacket and no bandana · brown SF Giants crewneck is the hero piece"],
-                ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the crewneck"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the cream NY chunky runners, covering ~1/3 of the shoe"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FTRV0366-10COL", name: "Pink Phillies double-zip hoodie", box: [54.7, 18.6, 18.4, 24.5] },
-                { cat: "Bottom",   sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.9, 43, 17.9, 45] },
-                { cat: "Headwear", sku: "3ABNB0766-07CRS", name: "Cream LA bunny-ear beanie", box: [59.1, 4.5, 9.8, 15.5] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.2, 51.8, 8.8, 16.5] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.4, 59.5, 4.4, 11.5] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 88.5, 16.3, 7.8] }
-              ],
-              notes: [
-                ["Hoodie zips", "Pink Phillies hoodie · top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button"],
-                ["Beanie", "Cream LA bunny-ear beanie with the long ears hanging down"],
-                ["Bag", "Brown quilted B mini hobo carried in the right hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan chunky sneakers"]
-              ]
-            }
+    "main-m16": {
+      set: "M16",
+      status: "live",
+      badge: "Locked pair",
+      image: "m16-main-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for M16: men left in brown SF Giants script crewneck over a white oversized tee, black NY pants, cream NY corduroy cap and cream NY chunky runners; women right in pink Phillies double-zip hoodie, cream LA wide jeans, cream LA bunny-ear beanie, brown quilted B mini hobo with pink cat keyring and tan NY chunky sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Top", sku: "3AMTV0564-14BRD", name: "Brown SF Giants script crewneck", box: [24.6, 16.3, 23.3, 34.5] },
+            { cat: "Inner", sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below crewneck)", box: [28.1, 48.2, 14.5, 3] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
+            { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Cream NY chunky runners", box: [22.9, 88.3, 20, 9.6] }
+          ],
+          notes: [
+            ["Layering", "No jacket and no bandana · brown SF Giants crewneck is the hero piece"],
+            ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the crewneck"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the cream NY chunky runners, covering ~1/3 of the shoe"]
           ]
         },
-        sub:   { status: "soon" },
-        third: { status: "soon" }
-      }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FTRV0366-10COL", name: "Pink Phillies double-zip hoodie", box: [54.7, 18.6, 18.4, 24.5] },
+            { cat: "Bottom", sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.9, 43, 17.9, 45] },
+            { cat: "Headwear", sku: "3ABNB0766-07CRS", name: "Cream LA bunny-ear beanie", box: [59.1, 4.5, 9.8, 15.5] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.2, 51.8, 8.8, 16.5] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.4, 59.5, 4.4, 11.5] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 88.5, 16.3, 7.8] }
+          ],
+          notes: [
+            ["Hoodie zips", "Pink Phillies hoodie · top zip pulled down to the collarbone · bottom zip pulled up to just above the belly button"],
+            ["Beanie", "Cream LA bunny-ear beanie with the long ears hanging down"],
+            ["Bag", "Brown quilted B mini hobo carried in the right hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan chunky sneakers"]
+          ]
+        }
+      ]
     },
-    {
-      id: "m09",
-      label: "M09",
-      stores: "M09",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "m09-main-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for M09: men left in open black NY Yankees varsity bomber over a plain brown crewneck, black NY pants, cream NY corduroy cap, white paisley bandana on the belt loop and silver/cream chunky NY sneakers; women right in pink double-zip hoodie, beige NY cargo pants with Yankees waistband, cream LA cat-ear trapper beanie, brown suede quilted B mini hobo with pink cat keyring and tan sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3AJPV0264-50BKS", name: "Black NY Yankees varsity bomber", box: [24.9, 14.1, 23.6, 37.4] },
-                { cat: "Top",      sku: "3ATSB0164-13BRD", name: "Brown crewneck (inner)", box: [31.1, 18.2, 6.5, 30] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.8, 48.2, 16.1, 39] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [31.1, 2.0, 8.2, 7.8] },
-                { cat: "Accessory",sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27.0, 48.8, 5.4, 18.2] },
-                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [24.2, 87.2, 19.2, 10.4] }
-              ],
-              notes: [
-                ["Jacket", "Black varsity bomber worn open casually so the brown crewneck shows down the front"],
-                ["Crewneck", "Plain brown crewneck as inner layer, chest logo covered by the open bomber"],
-                ["Bandana", "White LA paisley bandana folded into a triangle and tied through the side belt loop"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FTRV0664-45PKM", name: "Pink double-zip hoodie", box: [55.0, 13.5, 18.5, 31] },
-                { cat: "Bottom",   sku: "3FWPB2266-50SAL", name: "Beige NY cargo pants with Yankees waistband", box: [55.0, 44.5, 18.5, 46] },
-                { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9.0, 18] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown suede quilted B mini hobo bag", box: [68.5, 52.5, 8.5, 16.5] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.8, 60.5, 4.0, 10] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [54.5, 89.5, 19.0, 9.0] }
-              ],
-              notes: [
-                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up so the Yankees waistband shows"],
-                ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
-                ["Bag", "Brown suede quilted B mini hobo hand-carried in the outer (right) hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · beige cargo pants full length over tan sneakers"]
-              ]
-            }
+    "main-m09": {
+      set: "M09",
+      status: "live",
+      badge: "Locked pair",
+      image: "m09-main-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for M09: men left in open black NY Yankees varsity bomber over a plain brown crewneck, black NY pants, cream NY corduroy cap, white paisley bandana on the belt loop and silver/cream chunky NY sneakers; women right in pink double-zip hoodie, beige NY cargo pants with Yankees waistband, cream LA cat-ear trapper beanie, brown suede quilted B mini hobo with pink cat keyring and tan sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Outer", sku: "3AJPV0264-50BKS", name: "Black NY Yankees varsity bomber", box: [24.9, 14.1, 23.6, 37.4] },
+            { cat: "Top", sku: "3ATSB0164-13BRD", name: "Brown crewneck (inner)", box: [31.1, 18.2, 6.5, 30] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.8, 48.2, 16.1, 39] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [31.1, 2, 8.2, 7.8] },
+            { cat: "Accessory", sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27, 48.8, 5.4, 18.2] },
+            { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [24.2, 87.2, 19.2, 10.4] }
+          ],
+          notes: [
+            ["Jacket", "Black varsity bomber worn open casually so the brown crewneck shows down the front"],
+            ["Crewneck", "Plain brown crewneck as inner layer, chest logo covered by the open bomber"],
+            ["Bandana", "White LA paisley bandana folded into a triangle and tied through the side belt loop"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants covering ~1/3 of the sneakers"]
           ]
         },
-        sub:   { status: "soon" },
-        third: { status: "soon" }
-      }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FTRV0664-45PKM", name: "Pink double-zip hoodie", box: [55, 13.5, 18.5, 31] },
+            { cat: "Bottom", sku: "3FWPB2266-50SAL", name: "Beige NY cargo pants with Yankees waistband", box: [55, 44.5, 18.5, 46] },
+            { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9, 18] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown suede quilted B mini hobo bag", box: [68.5, 52.5, 8.5, 16.5] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.8, 60.5, 4, 10] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [54.5, 89.5, 19, 9] }
+          ],
+          notes: [
+            ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up so the Yankees waistband shows"],
+            ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
+            ["Bag", "Brown suede quilted B mini hobo hand-carried in the outer (right) hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · beige cargo pants full length over tan sneakers"]
+          ]
+        }
+      ]
     },
-    {
-      id: "m17-m22",
-      label: "M17 / M22",
-      stores: "M17 · M22",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "m17-m22-main-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for M17 / M22: men left in open black NY Yankees varsity bomber over a plain brown crewneck, black NY pants, cream NY corduroy cap, white paisley bandana on the belt loop and silver/cream chunky NY sneakers; women right in pink double-zip hoodie, beige NY cargo pants with Yankees waistband, cream NY fluffy cat-ear beanie, brown suede quilted B mini hobo with pink cat keyring and tan sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3AJPV0264-50BKS", name: "Black NY Yankees varsity bomber", box: [24.9, 14.1, 23.6, 37.4] },
-                { cat: "Top",      sku: "3ATSB0164-13BRD", name: "Brown crewneck (inner)", box: [31.1, 18.2, 6.5, 30] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.8, 48.2, 16.1, 39] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [31.1, 2.0, 8.2, 7.8] },
-                { cat: "Accessory",sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27.0, 48.8, 5.4, 18.2] },
-                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [24.2, 87.2, 19.2, 10.4] }
-              ],
-              notes: [
-                ["Jacket", "Black varsity bomber worn open casually so the brown crewneck shows down the front"],
-                ["Crewneck", "Plain brown crewneck as inner layer, chest logo covered by the open bomber"],
-                ["Bandana", "White LA paisley bandana folded into a triangle and tied through the side belt loop"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FTRV0664-45PKM", name: "Pink double-zip hoodie", box: [55.0, 13.5, 18.5, 31] },
-                { cat: "Bottom",   sku: "3FWPB2266-50SAL", name: "Beige NY cargo pants with Yankees waistband", box: [55.0, 44.5, 18.5, 46] },
-                { cat: "Headwear", sku: "3ABNB1166-50WHS", name: "Cream NY fluffy cat-ear beanie", box: [60.0, 4.0, 8.2, 11] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown suede quilted B mini hobo bag", box: [68.5, 52.5, 8.5, 16.5] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.8, 60.5, 4.0, 10] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [54.5, 89.5, 19.0, 9.0] }
-              ],
-              notes: [
-                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up so the Yankees waistband shows"],
-                ["Beanie", "Cream NY fluffy cat-ear beanie worn snug with the cuff folded, NY logo centred at the front"],
-                ["Bag", "Brown suede quilted B mini hobo hand-carried in the outer (right) hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · beige cargo pants full length over tan sneakers"]
-              ]
-            }
+    "main-m17-m22": {
+      set: "M17 · M22",
+      status: "live",
+      badge: "Locked pair",
+      image: "m17-m22-main-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for M17 / M22: men left in open black NY Yankees varsity bomber over a plain brown crewneck, black NY pants, cream NY corduroy cap, white paisley bandana on the belt loop and silver/cream chunky NY sneakers; women right in pink double-zip hoodie, beige NY cargo pants with Yankees waistband, cream NY fluffy cat-ear beanie, brown suede quilted B mini hobo with pink cat keyring and tan sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Outer", sku: "3AJPV0264-50BKS", name: "Black NY Yankees varsity bomber", box: [24.9, 14.1, 23.6, 37.4] },
+            { cat: "Top", sku: "3ATSB0164-13BRD", name: "Brown crewneck (inner)", box: [31.1, 18.2, 6.5, 30] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.8, 48.2, 16.1, 39] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [31.1, 2, 8.2, 7.8] },
+            { cat: "Accessory", sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27, 48.8, 5.4, 18.2] },
+            { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [24.2, 87.2, 19.2, 10.4] }
+          ],
+          notes: [
+            ["Jacket", "Black varsity bomber worn open casually so the brown crewneck shows down the front"],
+            ["Crewneck", "Plain brown crewneck as inner layer, chest logo covered by the open bomber"],
+            ["Bandana", "White LA paisley bandana folded into a triangle and tied through the side belt loop"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants covering ~1/3 of the sneakers"]
           ]
         },
-        sub:   { status: "soon" },
-        third: { status: "soon" }
-      }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FTRV0664-45PKM", name: "Pink double-zip hoodie", box: [55, 13.5, 18.5, 31] },
+            { cat: "Bottom", sku: "3FWPB2266-50SAL", name: "Beige NY cargo pants with Yankees waistband", box: [55, 44.5, 18.5, 46] },
+            { cat: "Headwear", sku: "3ABNB1166-50WHS", name: "Cream NY fluffy cat-ear beanie", box: [60, 4, 8.2, 11] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown suede quilted B mini hobo bag", box: [68.5, 52.5, 8.5, 16.5] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.8, 60.5, 4, 10] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [54.5, 89.5, 19, 9] }
+          ],
+          notes: [
+            ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up so the Yankees waistband shows"],
+            ["Beanie", "Cream NY fluffy cat-ear beanie worn snug with the cuff folded, NY logo centred at the front"],
+            ["Bag", "Brown suede quilted B mini hobo hand-carried in the outer (right) hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · beige cargo pants full length over tan sneakers"]
+          ]
+        }
+      ]
     },
-    {
-      id: "m24",
-      label: "M24",
-      stores: "M24",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "m24-main-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for M24: men left in brown SF Giants pink bear sweatshirt over a white oversized tee, black NY pants, cream corduroy NY cap and silver/cream chunky NY sneakers; women right in pink stripe double-zip hoodie, beige NY cargo pants with Yankees waistband, cream LA cat-ear trapper beanie, brown NY studded suede shoulder bag with pink cat keyring and tan NY sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Top",      sku: "3AMTE0164-14BRD", name: "Brown SF Giants pink bear sweatshirt", box: [24.6, 16.3, 23.3, 34.5] },
-                { cat: "Inner",    sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below sweatshirt)", box: [28.1, 48.2, 14.5, 3.0] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
-                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [23.7, 88.5, 19.4, 9.2] }
-              ],
-              notes: [
-                ["Layering", "No jacket and no bandana · oversized SF Giants sweatshirt is the hero piece"],
-                ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the sweatshirt"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the sneakers, covering ~1/3 of the shoe"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 19.3, 18.2, 31] },
-                { cat: "Bottom",   sku: "3FWPB2266-50SAL", name: "Beige NY cargo pants with Yankees waistband", box: [55.0, 44.5, 18.5, 46] },
-                { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9.0, 18] },
-                { cat: "Bag",      sku: "3ABQVB26N-50BRD", name: "Brown NY studded suede shoulder bag", box: [66.0, 52.7, 11.8, 18.9] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [67.4, 63.5, 3.4, 9.5] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 89.6, 16.6, 7.8] }
-              ],
-              notes: [
-                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up so the Yankees waistband shows"],
-                ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
-                ["Bag", "Brown NY studded suede shoulder bag hand-carried by the strap in the outer (right) hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · beige cargo pants full length over tan NY sneakers"]
-              ]
-            }
+    "main-m24": {
+      set: "M24",
+      status: "live",
+      badge: "Locked pair",
+      image: "m24-main-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for M24: men left in brown SF Giants pink bear sweatshirt over a white oversized tee, black NY pants, cream corduroy NY cap and silver/cream chunky NY sneakers; women right in pink stripe double-zip hoodie, beige NY cargo pants with Yankees waistband, cream LA cat-ear trapper beanie, brown NY studded suede shoulder bag with pink cat keyring and tan NY sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Top", sku: "3AMTE0164-14BRD", name: "Brown SF Giants pink bear sweatshirt", box: [24.6, 16.3, 23.3, 34.5] },
+            { cat: "Inner", sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below sweatshirt)", box: [28.1, 48.2, 14.5, 3] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
+            { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [23.7, 88.5, 19.4, 9.2] }
+          ],
+          notes: [
+            ["Layering", "No jacket and no bandana · oversized SF Giants sweatshirt is the hero piece"],
+            ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the sweatshirt"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the sneakers, covering ~1/3 of the shoe"]
           ]
         },
-        sub:   { status: "soon" },
-        third: { status: "soon" }
-      }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 19.3, 18.2, 31] },
+            { cat: "Bottom", sku: "3FWPB2266-50SAL", name: "Beige NY cargo pants with Yankees waistband", box: [55, 44.5, 18.5, 46] },
+            { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA cat-ear trapper beanie", box: [59.6, 3.6, 9, 18] },
+            { cat: "Bag", sku: "3ABQVB26N-50BRD", name: "Brown NY studded suede shoulder bag", box: [66, 52.7, 11.8, 18.9] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [67.4, 63.5, 3.4, 9.5] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 89.6, 16.6, 7.8] }
+          ],
+          notes: [
+            ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up so the Yankees waistband shows"],
+            ["Beanie", "Cream LA cat-ear trapper beanie worn snug, ear flaps down by the ears"],
+            ["Bag", "Brown NY studded suede shoulder bag hand-carried by the strap in the outer (right) hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · beige cargo pants full length over tan NY sneakers"]
+          ]
+        }
+      ]
     },
-    {
-      id: "mc2",
-      label: "MC2",
-      stores: "MC2",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "mc2-main-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for MC2: men left in open black NY Yankees varsity bomber over a plain brown crewneck, black NY pants, cream NY corduroy cap, white paisley bandana on the belt loop and silver/cream chunky NY sneakers; women right in pink stripe P double-zip hoodie, beige NY cargo pants with Yankees waistband, cream NY fluffy cat-ear beanie, brown suede quilted B mini hobo with pink cat keyring and tan sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3AJPV0264-50BKS", name: "Black NY Yankees varsity bomber", box: [24.9, 14.1, 23.6, 37.4] },
-                { cat: "Top",      sku: "3ATSB0164-13BRD", name: "Brown crewneck (inner)", box: [31.1, 18.2, 6.5, 30] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.8, 48.2, 16.1, 39] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [31.1, 2.0, 8.2, 7.8] },
-                { cat: "Accessory",sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27.0, 48.8, 5.4, 18.2] },
-                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [24.2, 87.2, 19.2, 10.4] }
-              ],
-              notes: [
-                ["Jacket", "Black varsity bomber worn open casually so the brown crewneck shows down the front"],
-                ["Crewneck", "Plain brown crewneck as inner layer, chest logo covered by the open bomber"],
-                ["Bandana", "White LA paisley bandana folded into a triangle and tied through the side belt loop"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [55.0, 13.5, 18.5, 31] },
-                { cat: "Bottom",   sku: "3FWPB2266-50SAL", name: "Beige NY cargo pants with Yankees waistband", box: [55.0, 44.5, 18.5, 46] },
-                { cat: "Headwear", sku: "3ABNB1166-50WHS", name: "Cream NY fluffy cat-ear beanie", box: [60.0, 4.0, 8.2, 11] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown suede quilted B mini hobo bag", box: [68.5, 52.5, 8.5, 16.5] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.8, 60.5, 4.0, 10] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [54.5, 89.5, 19.0, 9.0] }
-              ],
-              notes: [
-                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up so the Yankees waistband shows"],
-                ["Beanie", "Cream NY fluffy cat-ear beanie worn snug with the cuff folded, NY logo centred at the front"],
-                ["Bag", "Brown suede quilted B mini hobo hand-carried in the outer (right) hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · beige cargo pants full length over tan sneakers"]
-              ]
-            }
+    "main-mc2": {
+      set: "MC2",
+      status: "live",
+      badge: "Locked pair",
+      image: "mc2-main-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for MC2: men left in open black NY Yankees varsity bomber over a plain brown crewneck, black NY pants, cream NY corduroy cap, white paisley bandana on the belt loop and silver/cream chunky NY sneakers; women right in pink stripe P double-zip hoodie, beige NY cargo pants with Yankees waistband, cream NY fluffy cat-ear beanie, brown suede quilted B mini hobo with pink cat keyring and tan sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Outer", sku: "3AJPV0264-50BKS", name: "Black NY Yankees varsity bomber", box: [24.9, 14.1, 23.6, 37.4] },
+            { cat: "Top", sku: "3ATSB0164-13BRD", name: "Brown crewneck (inner)", box: [31.1, 18.2, 6.5, 30] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.8, 48.2, 16.1, 39] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [31.1, 2, 8.2, 7.8] },
+            { cat: "Accessory", sku: "3AETPB15N-07IVS", name: "White LA paisley bandana (belt loop)", box: [27, 48.8, 5.4, 18.2] },
+            { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Silver/cream chunky NY sneakers", box: [24.2, 87.2, 19.2, 10.4] }
+          ],
+          notes: [
+            ["Jacket", "Black varsity bomber worn open casually so the brown crewneck shows down the front"],
+            ["Crewneck", "Plain brown crewneck as inner layer, chest logo covered by the open bomber"],
+            ["Bandana", "White LA paisley bandana folded into a triangle and tied through the side belt loop"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants covering ~1/3 of the sneakers"]
           ]
         },
-        sub:   { status: "soon" },
-        third: { status: "soon" }
-      }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [55, 13.5, 18.5, 31] },
+            { cat: "Bottom", sku: "3FWPB2266-50SAL", name: "Beige NY cargo pants with Yankees waistband", box: [55, 44.5, 18.5, 46] },
+            { cat: "Headwear", sku: "3ABNB1166-50WHS", name: "Cream NY fluffy cat-ear beanie", box: [60, 4, 8.2, 11] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown suede quilted B mini hobo bag", box: [68.5, 52.5, 8.5, 16.5] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.8, 60.5, 4, 10] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [54.5, 89.5, 19, 9] }
+          ],
+          notes: [
+            ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up so the Yankees waistband shows"],
+            ["Beanie", "Cream NY fluffy cat-ear beanie worn snug with the cuff folded, NY logo centred at the front"],
+            ["Bag", "Brown suede quilted B mini hobo hand-carried in the outer (right) hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · beige cargo pants full length over tan sneakers"]
+          ]
+        }
+      ]
     },
-    {
-      id: "mc3",
-      label: "MC3",
-      stores: "MC3",
-      mannequins: {
-        main: {
-          status: "live",
-          badge: "Locked pair",
-          image: "mc3-main-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Main mannequin pair for MC3: men left in brown SF Giants script crewneck over a white oversized tee, black NY pants, cream NY corduroy cap and silver/cream chunky NY runners; women right in pink stripe P double-zip hoodie, cream LA wide jeans, cream LA bunny-ear beanie, brown quilted B mini hobo with pink cat keyring and tan chunky sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Top",      sku: "3AMTV0564-14BRD", name: "Brown SF Giants script crewneck", box: [24.6, 16.3, 23.3, 34.5] },
-                { cat: "Inner",    sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below crewneck)", box: [28.1, 48.2, 14.5, 3.0] },
-                { cat: "Bottom",   sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
-                { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
-                { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Cream NY chunky runners", box: [22.9, 88.3, 20.0, 9.6] }
-              ],
-              notes: [
-                ["Layering", "No jacket and no bandana · brown SF Giants crewneck is the hero piece"],
-                ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the crewneck"],
-                ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the cream NY chunky runners, covering ~1/3 of the shoe"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Top",      sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 18.5, 17.6, 24.5] },
-                { cat: "Bottom",   sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.9, 43, 17.9, 45] },
-                { cat: "Headwear", sku: "3ABNB0766-07CRS", name: "Cream LA bunny-ear beanie", box: [59.1, 4.5, 9.8, 15.5] },
-                { cat: "Bag",      sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.2, 51.8, 8.8, 16.5] },
-                { cat: "Keyring",  sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.4, 59.5, 4.4, 11.5] },
-                { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 88.5, 16.3, 7.8] }
-              ],
-              notes: [
-                ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to the waist"],
-                ["Bag", "Brown quilted B mini hobo carried in the right hand"],
-                ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
-                ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan chunky sneakers"]
-              ]
-            }
+    "main-mc3": {
+      set: "MC3",
+      status: "live",
+      badge: "Locked pair",
+      image: "mc3-main-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Main mannequin pair for MC3: men left in brown SF Giants script crewneck over a white oversized tee, black NY pants, cream NY corduroy cap and silver/cream chunky NY runners; women right in pink stripe P double-zip hoodie, cream LA wide jeans, cream LA bunny-ear beanie, brown quilted B mini hobo with pink cat keyring and tan chunky sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Top", sku: "3AMTV0564-14BRD", name: "Brown SF Giants script crewneck", box: [24.6, 16.3, 23.3, 34.5] },
+            { cat: "Inner", sku: "White T-shirt", note: "Size XL / XXL", name: "Plain white oversized T-shirt (hem shows below crewneck)", box: [28.1, 48.2, 14.5, 3] },
+            { cat: "Bottom", sku: "3AWPV0464-50BKS", name: "Black oversized NY pants", box: [27.3, 51.2, 16.6, 37.5] },
+            { cat: "Headwear", sku: "3ACPB0266-50CRS", name: "Cream NY corduroy cap", box: [30.5, 3.3, 8.4, 7.4] },
+            { cat: "Footwear", sku: "3ASHWC76N-50WHS", name: "Cream NY chunky runners", box: [22.9, 88.3, 20, 9.6] }
+          ],
+          notes: [
+            ["Layering", "No jacket and no bandana · brown SF Giants crewneck is the hero piece"],
+            ["Inner tee", "Plain white oversized tee (size XL / XXL) worn underneath so the white hem shows below the crewneck"],
+            ["Fit", "Mannequin ~183cm · black oversized NY pants pooling over the cream NY chunky runners, covering ~1/3 of the shoe"]
           ]
         },
-        sub: {
-          status: "live",
-          badge: "Locked pair",
-          image: "sub-m10-m18-mc1-mc3-pair.jpg",
-          imageW: 1152, imageH: 864,
-          alt: "Sub mannequin pair for MC3: men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
-          figures: [
-            {
-              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
-              items: [
-                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
-                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
-                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
-                { cat: "Headwear", sku: "3ABNBM266-50SPS", name: "Brown NY cuff beanie", box: [32.0, 3.3, 7.0, 9.8] },
-                { cat: "Footwear", sku: "3ASXS016N-07SBL", name: "Rookie Liner LA court sneakers (cream / blue LA)", box: [25.2, 90.5, 20.2, 7.3] }
-              ],
-              notes: [
-                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
-                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
-                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
-              ]
-            },
-            {
-              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
-              items: [
-                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
-                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
-                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
-                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
-                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
-                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
-                { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers", box: [60.1, 88.5, 9.5, 9.4] }
-              ],
-              notes: [
-                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
-                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
-                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
-                ["Socks", "Grey plush high socks pulled up to just below the knee"],
-                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
-              ]
-            }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Top", sku: "3FKCB0664-10PKD", name: "Pink stripe P double-zip hoodie", box: [54.9, 18.5, 17.6, 24.5] },
+            { cat: "Bottom", sku: "3FDPV0164-07IVS", name: "Cream LA wide jeans", box: [55.9, 43, 17.9, 45] },
+            { cat: "Headwear", sku: "3ABNB0766-07CRS", name: "Cream LA bunny-ear beanie", box: [59.1, 4.5, 9.8, 15.5] },
+            { cat: "Bag", sku: "3ACRBM26N-43BGD", name: "Brown quilted B mini hobo bag", box: [67.2, 51.8, 8.8, 16.5] },
+            { cat: "Keyring", sku: "3AETMC16N-43PKS", name: "Pink cat keyring in B beanie", box: [66.4, 59.5, 4.4, 11.5] },
+            { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY chunky sneakers", box: [56.4, 88.5, 16.3, 7.8] }
+          ],
+          notes: [
+            ["Hoodie zips", "Top zip pulled down to the collarbone · bottom zip pulled up to the waist"],
+            ["Bag", "Brown quilted B mini hobo carried in the right hand"],
+            ["Keyring", "Pink cat (B beanie) keyring clipped on the bag handle"],
+            ["Fit", "Mannequin ~173cm · cream LA wide jeans full length over tan chunky sneakers"]
+          ]
+        }
+      ]
+    },
+    "sub-set1": {
+      set: "M01 · M10 · M14 · M18 · MC1 · MC3",
+      status: "live",
+      badge: "Locked pair",
+      image: "sub-m10-m18-mc1-mc3-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Sub mannequin pair (set 1): men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Outer", sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23, 18.2, 25.2, 33.9] },
+            { cat: "Top", sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
+            { cat: "Bottom", sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
+            { cat: "Headwear", sku: "3ABNBM266-50SPS", name: "Brown NY cuff beanie", box: [32, 3.3, 7, 9.8] },
+            { cat: "Footwear", sku: "3ASXS016N-07SBL", name: "Rookie Liner LA court sneakers (cream / blue LA)", box: [25.2, 90.5, 20.2, 7.3] }
+          ],
+          notes: [
+            ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
+            ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
+            ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
           ]
         },
-        third: { status: "soon" }
-      }
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Outer", sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54, 20.4, 22.4, 33] },
+            { cat: "Top", sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8, 14.6] },
+            { cat: "Bottom", sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
+            { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
+            { cat: "Bag", sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12] },
+            { cat: "Socks", sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14] },
+            { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers", box: [60.1, 88.5, 9.5, 9.4] }
+          ],
+          notes: [
+            ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
+            ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
+            ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
+            ["Socks", "Grey plush high socks pulled up to just below the knee"],
+            ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
+          ]
+        }
+      ]
+    },
+    "sub-set2": {
+      set: "M02 · M05 · M11",
+      status: "live",
+      badge: "Locked pair",
+      image: "sub-m02-m05-m11-pair.jpg",
+      imageW: 1152,
+      imageH: 864,
+      alt: "Sub mannequin pair (set 2): men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and sleek Powder Twill sneakers",
+      figures: [
+        {
+          role: "Men",
+          pill: "M",
+          side: "left",
+          where: "left",
+          height: "~183cm",
+          items: [
+            { cat: "Outer", sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23, 18.2, 25.2, 33.9] },
+            { cat: "Top", sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
+            { cat: "Bottom", sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
+            { cat: "Headwear", sku: "3ABNBM266-50SPS", name: "Brown NY cuff beanie", box: [32, 3.3, 7, 9.8] },
+            { cat: "Footwear", sku: "3ASXS016N-07SBL", name: "Rookie Liner LA court sneakers (cream / blue LA)", box: [25.2, 90.5, 20.2, 7.3] }
+          ],
+          notes: [
+            ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
+            ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
+            ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
+          ]
+        },
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "right",
+          height: "~173cm",
+          items: [
+            { cat: "Outer", sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54, 20.4, 22.4, 33] },
+            { cat: "Top", sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8, 14.6] },
+            { cat: "Bottom", sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
+            { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
+            { cat: "Bag", sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12] },
+            { cat: "Socks", sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14] },
+            { cat: "Footwear", sku: "3ACVSP46N-07CRS", name: "Sleek Powder Twill sneakers", box: [60.1, 88.5, 9.5, 9.4] }
+          ],
+          notes: [
+            ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
+            ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
+            ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
+            ["Socks", "Grey plush high socks pulled up to just below the knee"],
+            ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Sleek Powder Twill sneakers"]
+          ]
+        }
+      ]
     }
-    /* , { id: "next-group", label: "Mxx / Myy", stores: "...", mannequins: { main: {...}, sub: {status:"soon"}, third: {status:"soon"} } } */
+  };
+
+  var STORES = [
+    { id: "m01", label: "M01", slots: { main: "main-m01", sub: "sub-set1", third: "soon" } },
+    { id: "m02", label: "M02", slots: { main: "main-m02-m05", sub: "sub-set2", third: "soon" } },
+    { id: "m05", label: "M05", slots: { main: "main-m02-m05", sub: "sub-set2", third: "soon" } },
+    { id: "m09", label: "M09", slots: { main: "main-m09", sub: "soon", third: "soon" } },
+    { id: "m10", label: "M10", slots: { main: "main-m10-m18-mc1", sub: "sub-set1", third: "soon" } },
+    { id: "m11", label: "M11", slots: { main: "main-m11-m14", sub: "sub-set2", third: "soon" } },
+    { id: "m14", label: "M14", slots: { main: "main-m11-m14", sub: "sub-set1", third: "soon" } },
+    { id: "m16", label: "M16", slots: { main: "main-m16" } },
+    { id: "m17", label: "M17", slots: { main: "main-m17-m22" } },
+    { id: "m18", label: "M18", slots: { main: "main-m10-m18-mc1", sub: "sub-set1", third: "soon" } },
+    { id: "m22", label: "M22", slots: { main: "main-m17-m22" } },
+    { id: "m24", label: "M24", slots: { main: "main-m24" } },
+    { id: "mc1", label: "MC1", slots: { main: "main-m10-m18-mc1", sub: "sub-set1", third: "soon" } },
+    { id: "mc2", label: "MC2", slots: { main: "main-mc2" } },
+    { id: "mc3", label: "MC3", slots: { main: "main-mc3", sub: "sub-set1", third: "soon" } }
   ];
 
   var MANNEQUIN_SLOTS = [
-    { key: "main",  label: "Main",  title: "Main Mannequin" },
-    { key: "sub",   label: "Sub",   title: "Sub Mannequin" },
-    { key: "third", label: "Third", title: "Third Mannequin" }
+    { key: "main",  label: "MAIN", title: "Main Mannequin" },
+    { key: "sub",   label: "SUB",  title: "Sub Mannequin" },
+    { key: "third", label: "3RD",  title: "3rd Mannequin" }
   ];
 
   /* ================================================================ */
@@ -1698,9 +1617,14 @@
       return fig.items.slice().sort(function (a, b) { return b.box[2] * b.box[3] - a.box[2] * a.box[3]; });
     }
 
-    function livePanel(g, slot, m) {
-      var storeNote = m.storeNote ? '<p class="store-note">' + esc(m.storeNote) +
-        (m.storeNoteImage ? ' <a href="' + esc(m.storeNoteImage) + '" target="_blank" rel="noopener">View M11 shoe variant image</a>' : "") + "</p>" : "";
+    function sharedWith(store, key) {
+      return STORES.filter(function (x) { return x.id !== store.id && x.slots[key] === store.slots[key]; })
+        .map(function (x) { return x.label; });
+    }
+
+    function livePanel(store, slot, m) {
+      var same = sharedWith(store, slot.key);
+      var sameHtml = same.length ? '<p class="same-set">Same set as ' + esc(same.join(", ")) + "</p>" : "";
       var spots = m.figures.map(function (f) { return hotspotOrder(f).filter(function (it) { return !it.noSpot; }).map(function (it) { return hotspot(f, it); }).join(""); }).join("");
       var tables = m.figures.map(function (f) {
         return '<div class="sku-block"><h3><span class="role-pill' + (f.pill === "M" ? " m" : "") + '">' + f.pill + "</span> " +
@@ -1716,85 +1640,95 @@
           esc(f.role) + " styling notes</h3><ul>" +
           f.notes.map(function (n) { return "<li><b>" + esc(n[0]) + ":</b> " + esc(n[1]) + "</li>"; }).join("") + "</ul></div>";
       }).join("") + "</div>";
-      return '<div class="panel-head"><h2>' + slot.title + '</h2><span class="panel-badge live">' + esc(m.badge || "Live") + "</span></div>" +
-        '<div class="panel-body"><div class="stage-wrap"><div class="hotspot-stage" style="aspect-ratio:' + m.imageW + " / " + m.imageH + '" aria-label="' + esc(g.label + " " + slot.title) + ' with SKU hotspots">' +
+      return '<div class="panel-head"><h2>' + esc(store.label) + " · " + slot.title + '</h2><span class="panel-badge live">' + esc(m.badge || "Live") + "</span></div>" +
+        sameHtml +
+        '<div class="panel-body"><div class="stage-wrap"><div class="hotspot-stage" style="aspect-ratio:' + m.imageW + " / " + m.imageH + '" aria-label="' + esc(store.label + " " + slot.title) + ' with SKU hotspots">' +
         '<img src="' + esc(m.image) + '" alt="' + esc(m.alt) + '" width="' + m.imageW + '" height="' + m.imageH + '" />' +
-        spots + '</div></div><p class="hint">Hover or focus apparel to reveal SKU</p>' + storeNote + notes + tables + "</div>";
+        spots + '</div></div><p class="hint">Hover or focus apparel to reveal SKU</p>' + notes + tables + "</div>";
     }
 
-    function soonPanel(g, slot) {
-      return '<div class="panel-head"><h2>' + slot.title + '</h2><span class="panel-badge wait">Coming soon</span></div>' +
+    function soonPanel(store, slot) {
+      var why = slot.key === "sub" ? "fit being picked" : "next task";
+      return '<div class="panel-head"><h2>' + esc(store.label) + " · " + slot.title + '</h2><span class="panel-badge wait">Coming soon</span></div>' +
         '<div class="panel-body"><div class="placeholder-art wide"><div class="icon">' + slot.label.charAt(0) + "</div>" +
-        "<strong>" + slot.title + " · coming soon</strong><span>Look for " + esc(g.stores) + " not released yet — SKUs and image will be added here.</span></div></div>";
+        "<strong>" + slot.title + " · coming soon</strong><span>" + esc(store.label) + " " + slot.label + " look pending (" + why + ") — SKUs and image will be added here.</span></div></div>";
     }
+
+    function slotsOf(store) { return MANNEQUIN_SLOTS.filter(function (s) { return store.slots[s.key]; }); }
+    function lookOf(store, key) { var k = store.slots[key]; return k && k !== "soon" ? LOOKS[k] : null; }
 
     var groupList = document.getElementById("group-list");
     var groupPanels = document.getElementById("group-panels");
     var navInner = document.getElementById("nav-inner");
     var images = [];
 
-    STORE_GROUPS.forEach(function (g, gi) {
-      var liveCount = MANNEQUIN_SLOTS.filter(function (s) { return g.mannequins[s.key] && g.mannequins[s.key].status === "live"; }).length;
+    STORES.forEach(function (st) {
+      var slots = slotsOf(st);
+      var liveCount = slots.filter(function (s) { return lookOf(st, s.key); }).length;
+      var small = slots.length === 1 ? "1 set · main only" : liveCount + "/" + slots.length + " live";
       groupList.insertAdjacentHTML("beforeend",
-        '<button type="button" class="group-btn" role="tab" id="gtab-' + g.id + '" aria-controls="group-' + g.id + '" data-group="' + g.id + '">' +
-        "<small>Store group " + String(gi + 1).padStart(2, "0") + " · " + liveCount + "/" + MANNEQUIN_SLOTS.length + " live</small>" + esc(g.label) + "</button>");
-      navInner.insertAdjacentHTML("beforeend", '<a class="nav-chip" href="#' + g.id + '" data-group="' + g.id + '">' + esc(g.label) + "</a>");
+        '<button type="button" class="group-btn" role="tab" id="gtab-' + st.id + '" aria-controls="group-' + st.id + '" data-group="' + st.id + '">' +
+        "<small>" + small + "</small>" + esc(st.label) + "</button>");
+      navInner.insertAdjacentHTML("beforeend", '<a class="nav-chip" href="#' + st.id + '" data-group="' + st.id + '">' + esc(st.label) + "</a>");
 
       var tabs = "", panels = "";
-      MANNEQUIN_SLOTS.forEach(function (slot) {
-        var m = g.mannequins[slot.key] || { status: "soon" };
-        var pid = g.id + "-" + slot.key;
+      slots.forEach(function (slot) {
+        var m = lookOf(st, slot.key);
+        var pid = st.id + "-" + slot.key;
         tabs += '<button type="button" class="tab-btn" role="tab" id="tab-' + pid + '" aria-controls="' + pid + '" data-slot="' + slot.key + '">' +
-          slot.label + (m.status === "live" ? "" : '<span class="soon">Soon</span>') + "</button>";
+          slot.label + (m ? "" : '<span class="soon">Soon</span>') + "</button>";
         panels += '<article class="panel" role="tabpanel" id="' + pid + '" aria-labelledby="tab-' + pid + '" hidden>' +
-          (m.status === "live" ? livePanel(g, slot, m) : soonPanel(g, slot)) + "</article>";
-        if (m.status === "live" && images.indexOf(m.image) === -1) images.push(m.image);
+          (m ? livePanel(st, slot, m) : soonPanel(st, slot)) + "</article>";
+        if (m && images.indexOf(m.image) === -1) images.push(m.image);
       });
+      var single = slots.length === 1;
       groupPanels.insertAdjacentHTML("beforeend",
-        '<div class="group-panel" role="tabpanel" id="group-' + g.id + '" aria-labelledby="gtab-' + g.id + '" hidden>' +
-        '<p class="group-intro">Stores: <b>' + esc(g.stores) + "</b> · assortment specific to this group</p>" +
-        '<div class="app-tabs"><div class="tab-list" role="tablist" aria-label="' + esc(g.label) + ' mannequins">' + tabs + "</div>" +
+        '<div class="group-panel" role="tabpanel" id="group-' + st.id + '" aria-labelledby="gtab-' + st.id + '" hidden>' +
+        '<p class="group-intro">Store: <b>' + esc(st.label) + "</b>" + (single ? " · single mannequin set (MAIN only)" : " · MAIN / SUB / 3RD") + "</p>" +
+        '<div class="app-tabs' + (single ? " single" : "") + '"><div class="tab-list" role="tablist" aria-label="' + esc(st.label) + ' mannequins"' + (single ? " hidden" : "") + ">" + tabs + "</div>" +
         '<div class="tab-panels">' + panels + "</div></div></div>");
     });
 
     document.getElementById("footer-note").innerHTML = "Self-contained guideline · images " +
       images.map(function (i) { return "<code>" + esc(i) + "</code>"; }).join(" · ");
 
-    var state = {};  // groupId -> active slot
-    function firstLive(g) {
-      for (var i = 0; i < MANNEQUIN_SLOTS.length; i++) {
-        var m = g.mannequins[MANNEQUIN_SLOTS[i].key];
-        if (m && m.status === "live") return MANNEQUIN_SLOTS[i].key;
-      }
+    var state = {};  // storeId -> active slot
+    function firstLive(st) {
+      var s = slotsOf(st);
+      for (var i = 0; i < s.length; i++) if (lookOf(st, s[i].key)) return s[i].key;
       return "main";
     }
-    function findGroup(id) { return STORE_GROUPS.filter(function (g) { return g.id === id; })[0]; }
+    function findStore(id) { return STORES.filter(function (g) { return g.id === id; })[0]; }
 
-    function activate(groupId, slotKey, opts) {
+    function activate(storeId, slotKey, opts) {
       opts = opts || {};
-      var g = findGroup(groupId) || STORE_GROUPS[0];
-      slotKey = slotKey || state[g.id] || firstLive(g);
-      state[g.id] = slotKey;
-      STORE_GROUPS.forEach(function (x) {
-        var sel = x.id === g.id;
+      var st = findStore(storeId) || STORES[0];
+      if (slotKey && !st.slots[slotKey]) slotKey = null;
+      slotKey = slotKey || state[st.id] || firstLive(st);
+      state[st.id] = slotKey;
+      STORES.forEach(function (x) {
+        var sel = x.id === st.id;
         var b = document.getElementById("gtab-" + x.id);
         b.setAttribute("aria-selected", sel ? "true" : "false"); b.tabIndex = sel ? 0 : -1;
         document.getElementById("group-" + x.id).hidden = !sel;
       });
-      MANNEQUIN_SLOTS.forEach(function (s) {
-        var pid = g.id + "-" + s.key, sel = s.key === slotKey;
+      slotsOf(st).forEach(function (s) {
+        var pid = st.id + "-" + s.key, sel = s.key === slotKey;
         var t = document.getElementById("tab-" + pid);
         t.setAttribute("aria-selected", sel ? "true" : "false"); t.tabIndex = sel ? 0 : -1;
         document.getElementById(pid).hidden = !sel;
       });
-      if (opts.updateHash && history.replaceState) history.replaceState(null, "", "#" + g.id + "-" + slotKey);
+      if (opts.updateHash && history.replaceState) history.replaceState(null, "", "#" + st.id + (slotsOf(st).length > 1 ? "-" + slotKey : ""));
       if (opts.scroll) document.getElementById("application").scrollIntoView({ behavior: "smooth", block: "start" });
     }
 
+    // old store-group links (#m10-m18-mc1-sub etc.) open the group's first store
+    var LEGACY = { "m10-m18-mc1": "m10", "m11-m14": "m11", "m02-m05": "m02", "m17-m22": "m17" };
     function fromHash() {
-      var h = (location.hash || "").replace(/^#/, "");
-      for (var i = 0; i < STORE_GROUPS.length; i++) {
-        var g = STORE_GROUPS[i];
+      var h = (location.hash || "").replace(/^#/, "").toLowerCase();
+      Object.keys(LEGACY).forEach(function (k) { if (h === k || h.indexOf(k + "-") === 0) h = LEGACY[k] + h.slice(k.length); });
+      for (var i = 0; i < STORES.length; i++) {
+        var g = STORES[i];
         if (h === g.id) return [g.id, null];
         for (var j = 0; j < MANNEQUIN_SLOTS.length; j++) if (h === g.id + "-" + MANNEQUIN_SLOTS[j].key) return [g.id, MANNEQUIN_SLOTS[j].key];
       }
@@ -1827,12 +1761,24 @@
       a.addEventListener("click", function (e) { e.preventDefault(); activate(a.dataset.group, null, { updateHash: true, scroll: true }); });
     });
     window.addEventListener("hashchange", function () { var h = fromHash(); if (h) activate(h[0], h[1], { scroll: true }); });
+    // keep tooltips inside the viewport on narrow screens (nudge sideways if they would be clipped)
+    function fitTooltip(el) {
+      var t = el.querySelector(".tooltip"); if (!t) return;
+      t.style.translate = "0px 0px";
+      var r = t.getBoundingClientRect(), vw = document.documentElement.clientWidth, pad = 8, shift = 0;
+      if (r.left < pad) shift = pad - r.left;
+      else if (r.right > vw - pad) shift = (vw - pad) - r.right;
+      t.style.translate = shift + "px 0px";
+    }
     document.querySelectorAll(".hotspot").forEach(function (el) {
       el.addEventListener("keydown", function (e) { if (e.key === "Escape") el.blur(); });
+      el.addEventListener("mouseenter", function () { fitTooltip(el); });
+      el.addEventListener("focus", function () { fitTooltip(el); });
+      el.addEventListener("touchstart", function () { fitTooltip(el); }, { passive: true });
     });
 
     var init = fromHash();
-    activate(init ? init[0] : STORE_GROUPS[0].id, init ? init[1] : null, { scroll: !!init });
+    activate(init ? init[0] : STORES[0].id, init ? init[1] : null, { scroll: !!init });
   })();
   </script>
 </body>
