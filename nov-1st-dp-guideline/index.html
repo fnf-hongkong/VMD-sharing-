@@ -1647,25 +1647,60 @@
           ]
         }
       ]
+    },
+    "third-women": {
+      set: "M01 · M10 · M14 · MC1",
+      status: "live",
+      badge: "Women only",
+      image: "third-women.jpg",
+      imageW: 800,
+      imageH: 864,
+      alt: "3rd mannequin (women only): navy LA nano logo ballcap, cream monogram crop down jacket zipped up over a black tee, studded denim mini skirt, blue Dia Monogram Candy padded tote, black plush high socks and Olle Monogram sneakers",
+      figures: [
+        {
+          role: "Women",
+          pill: "W",
+          side: "right",
+          where: "centre",
+          height: "~173cm",
+          items: [
+            { cat: "Outer", sku: "3FDJM7166-43CRD", name: "Cream Classic Monogram tone-on-tone JQD goose crop down jacket", box: [34.5, 18.8, 30.5, 33.9] },
+            { cat: "Inner", sku: "3ATSB0164-07BKS", note: "Placeholder SKU", name: "Black Basic small logo heavyweight over-fit LS tee (collar only)", box: [47.3, 23.1, 5, 4.6] },
+            { cat: "Bottom", sku: "3FDSB0664-07INS", name: "Basic small logo studded denim mini skirt", box: [38.8, 43.5, 21.5, 16.7] },
+            { cat: "Headwear", sku: "3ACPB386N-07NYD", name: "Navy Classic Nano Logo unstructured ballcap", box: [44.4, 7.9, 10, 8.6] },
+            { cat: "Bag", sku: "3AORSP26N-07BLM", name: "Blue Dia Monogram Candy padded tote bag", box: [55, 54.4, 14.8, 14.8] },
+            { cat: "Socks", sku: "3ASOHF166-50BKS", name: "Black plush high socks", box: [42.5, 74.5, 13.5, 14.6] },
+            { cat: "Footwear", sku: "3ACVOL26N-50CRS", name: "Olle Monogram sneakers", box: [43.3, 88.7, 12.8, 9.5] }
+          ],
+          notes: [
+            ["Jacket", "Crop down zipped up with the top slightly open to show the black tee collar"],
+            ["Inner", "Black tee shows only at the collar · 3ATSB0164-07BKS is a placeholder SKU"],
+            ["Cap", "Navy nano logo ballcap worn straight, logo centred at the front"],
+            ["Bag", "Blue Candy padded tote hand-carried in the outer (right) hand"],
+            ["Socks", "Black plush high socks pulled up to just below the knee"],
+            ["Fit", "Mannequin ~173cm · studded denim mini skirt sits on the hip over Olle Monogram sneakers"]
+          ]
+        }
+      ]
     }
   };
 
   var STORES = [
-    { id: "m01", label: "M01", slots: { main: "main-m01", sub: "sub-set1", third: "soon" } },
-    { id: "m02", label: "M02", slots: { main: "main-m02-m05", sub: "sub-set3", third: "soon" } },
-    { id: "m05", label: "M05", slots: { main: "main-m02-m05", sub: "sub-set3", third: "soon" } },
-    { id: "m09", label: "M09", slots: { main: "main-m09", sub: "sub-m09", third: "soon" } },
-    { id: "m10", label: "M10", slots: { main: "main-m10-m18-mc1", sub: "sub-set1", third: "soon" } },
-    { id: "m11", label: "M11", slots: { main: "main-m11-m14", sub: "sub-set2", third: "soon" } },
-    { id: "m14", label: "M14", slots: { main: "main-m11-m14", sub: "sub-set1", third: "soon" } },
+    { id: "m01", label: "M01", slots: { main: "main-m01", sub: "sub-set1", third: "third-women" } },
+    { id: "m02", label: "M02", slots: { main: "main-m02-m05", sub: "sub-set3" } },
+    { id: "m05", label: "M05", slots: { main: "main-m02-m05", sub: "sub-set3" } },
+    { id: "m09", label: "M09", slots: { main: "main-m09", sub: "sub-m09" } },
+    { id: "m10", label: "M10", slots: { main: "main-m10-m18-mc1", sub: "sub-set1", third: "third-women" } },
+    { id: "m11", label: "M11", slots: { main: "main-m11-m14", sub: "sub-set2" } },
+    { id: "m14", label: "M14", slots: { main: "main-m11-m14", sub: "sub-set1", third: "third-women" } },
     { id: "m16", label: "M16", slots: { main: "main-m16" } },
-    { id: "m17", label: "M17", slots: { main: "main-m17-m22", sub: "sub-set3", third: "soon" } },
-    { id: "m18", label: "M18", slots: { main: "main-m10-m18-mc1", sub: "sub-set1", third: "soon" } },
+    { id: "m17", label: "M17", slots: { main: "main-m17-m22", sub: "sub-set3" } },
+    { id: "m18", label: "M18", slots: { main: "main-m10-m18-mc1", sub: "sub-set1" } },
     { id: "m22", label: "M22", slots: { main: "main-m17-m22" } },
     { id: "m24", label: "M24", slots: { main: "main-m24" } },
-    { id: "mc1", label: "MC1", slots: { main: "main-m10-m18-mc1", sub: "sub-set1", third: "soon" } },
+    { id: "mc1", label: "MC1", slots: { main: "main-m10-m18-mc1", sub: "sub-set1", third: "third-women" } },
     { id: "mc2", label: "MC2", slots: { main: "main-mc2" } },
-    { id: "mc3", label: "MC3", slots: { main: "main-mc3", sub: "sub-set1", third: "soon" } }
+    { id: "mc3", label: "MC3", slots: { main: "main-mc3", sub: "sub-set1" } }
   ];
 
   var MANNEQUIN_SLOTS = [
@@ -1772,7 +1807,7 @@
       var single = slots.length === 1;
       groupPanels.insertAdjacentHTML("beforeend",
         '<div class="group-panel" role="tabpanel" id="group-' + st.id + '" aria-labelledby="gtab-' + st.id + '" hidden>' +
-        '<p class="group-intro">Store: <b>' + esc(st.label) + "</b>" + (single ? " · single mannequin set (MAIN only)" : " · MAIN / SUB / 3RD") + "</p>" +
+        '<p class="group-intro">Store: <b>' + esc(st.label) + "</b>" + (single ? " · single mannequin set (MAIN only)" : " · " + slots.map(function (s) { return s.label; }).join(" / ")) + "</p>" +
         '<div class="app-tabs' + (single ? " single" : "") + '"><div class="tab-list" role="tablist" aria-label="' + esc(st.label) + ' mannequins"' + (single ? " hidden" : "") + ">" + tabs + "</div>" +
         '<div class="tab-panels">' + panels + "</div></div></div>");
     });
