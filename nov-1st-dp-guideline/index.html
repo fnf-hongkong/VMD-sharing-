@@ -888,18 +888,6 @@
     .dp-desig { font-size: 0.78rem; font-weight: 600; color: var(--birdhouse-brown); margin: 0 0 4px; }
     .dp-desig b { color: var(--city-hunter-blue); }
     .dp-mix { font-size: 0.75rem; color: var(--birdhouse-brown); margin: 0 0 4px; }
-    .avail-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border-radius: var(--radius-sm); }
-    table.avail-table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: 0.74rem; background: var(--nano-white); }
-    table.avail-table th, table.avail-table td { padding: 7px 5px; text-align: center; border-bottom: 1px solid rgba(62, 58, 54, 0.08); }
-    table.avail-table thead th { background: var(--modest-white); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.04em; color: var(--birdhouse-brown); }
-    table.avail-table th.sku-h, table.avail-table td.sku-h { text-align: left; padding-left: 11px; white-space: nowrap; }
-    table.avail-table td.sku-h code { font-family: ui-monospace, monospace; font-size: 0.72rem; color: var(--city-hunter-blue); }
-    table.avail-table tr:last-child td { border-bottom: none; }
-    table.avail-table .desig { background: rgba(7, 37, 176, 0.08); }
-    table.avail-table thead th.desig { background: var(--city-hunter-blue); color: var(--white); }
-    table.avail-table .yes { color: #1e8e3e; font-weight: 700; }
-    table.avail-table .no { color: #c0392b; font-weight: 700; }
-    .avail-foot { font-size: 0.72rem; color: var(--birdhouse-brown); margin-top: 6px; font-style: italic; }
     @media (max-width: 760px) { .dp-ref { padding: 18px 14px 22px; } }
   </style>
 </head>
@@ -1489,7 +1477,6 @@
     { id: "mc3", label: "MC3", slots: { main: "main-mc3", sub: "sub-set1" } }
   ];
 
-  var DP_STORES = ["M01", "M02", "M05", "M09", "M10", "M11", "M14", "M16", "M17", "M18", "M22", "M24", "MC1", "MC2", "MC3"];
   var DP_REFS = [
     {
       id: "ref1",
@@ -1501,14 +1488,14 @@
       stores: ["M01", "M09", "M10", "M11", "M16", "M18", "M22", "M24", "MC1", "MC2", "MC3"],
       note: "",
       items: [
-        { cat: "Headwear", sku: "3ABNB0766-50BKS", name: "Black NY bunny beanie \u00b7 left head stand", box: [35.6,  7.7,  14.2,  18.5], avail: [0,  0,  0,  0,  1,  0,  0,  1,  0,  1,  0,  0,  1,  0,  1] },
-        { cat: "Headwear", sku: "3ABNB0766-07CRS", name: "Cream LA bunny beanie \u00b7 right head stand", box: [50.3,  7.7,  14.1,  18.5], avail: [0,  0,  0,  0,  1,  0,  0,  1,  0,  1,  0,  0,  1,  0,  1] },
-        { cat: "Bag", sku: "3ACRBM26N-43SAL", name: "Beige Basic quilting B mini cross bag \u00b7 on the stand", box: [17.9,  5.4,  14.6,  18.9], avail: [1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1] },
-        { cat: "Bag", sku: "3ACRBM26N-43BRD", name: "Brown Basic quilting B mini cross bag \u00b7 on the table", box: [24.9,  30.1,  16.1,  17.5], avail: [1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1] },
-        { cat: "Top", sku: "3FKCB0664-10PKD", name: "Pink Women's basic stripe P hood zip-up cardigan \u00b7 folded", box: [43.5,  29.2,  17.3,  18.8], avail: [0,  1,  1,  0,  1,  1,  1,  0,  0,  1,  0,  1,  1,  1,  1] },
-        { cat: "Top", sku: "3FKCB0664-46MGS", name: "Grey Women's basic stripe D hood zip-up cardigan \u00b7 folded", box: [63.3,  29.2,  17.1,  19.3], avail: [0,  1,  1,  0,  1,  1,  1,  0,  0,  1,  0,  1,  1,  1,  1] },
-        { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY Curve Liner LT \u00b7 front left", box: [33.5,  48.6,  14.6,  16.9], avail: [1,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1] },
-        { cat: "Footwear", sku: "3ASXL106N-50WHS", name: "Cream Curve Liner LT \u00b7 front right", box: [54.5,  49,  14.4,  16.5], avail: [1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1] }
+        { cat: "Headwear", sku: "3ABNB0766-50BKS", name: "Black NY bunny beanie \u00b7 left head stand", box: [35.6,  7.7,  14.2,  18.5] },
+        { cat: "Headwear", sku: "3ABNB0766-07CRS", name: "Cream LA bunny beanie \u00b7 right head stand", box: [50.3,  7.7,  14.1,  18.5] },
+        { cat: "Bag", sku: "3ACRBM26N-43SAL", name: "Beige Basic quilting B mini cross bag \u00b7 on the stand", box: [17.9,  5.4,  14.6,  18.9] },
+        { cat: "Bag", sku: "3ACRBM26N-43BRD", name: "Brown Basic quilting B mini cross bag \u00b7 on the table", box: [24.9,  30.1,  16.1,  17.5] },
+        { cat: "Top", sku: "3FKCB0664-10PKD", name: "Pink Women's basic stripe P hood zip-up cardigan \u00b7 folded", box: [43.5,  29.2,  17.3,  18.8] },
+        { cat: "Top", sku: "3FKCB0664-46MGS", name: "Grey Women's basic stripe D hood zip-up cardigan \u00b7 folded", box: [63.3,  29.2,  17.1,  19.3] },
+        { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY Curve Liner LT \u00b7 front left", box: [33.5,  48.6,  14.6,  16.9] },
+        { cat: "Footwear", sku: "3ASXL106N-50WHS", name: "Cream Curve Liner LT \u00b7 front right", box: [54.5,  49,  14.4,  16.5] }
       ]
     },
     {
@@ -1521,14 +1508,14 @@
       stores: ["M01", "M09", "M10", "M11", "M16", "M18", "M22", "M24", "MC1", "MC2", "MC3"],
       note: "Stores can mix Ref 1 and Ref 2 based on availability.",
       items: [
-        { cat: "Headwear", sku: "3ABNB0466-50BKS", name: "Black NY fur meowing earflap beanie \u00b7 left head stand", box: [36.8,  7,  11.5,  27.2], avail: [1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  0,  1,  1,  0,  1] },
-        { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA fur meowing earflap beanie \u00b7 right head stand", box: [51.6,  7,  11.5,  27.2], avail: [1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  0,  1,  1,  0,  1] },
-        { cat: "Bag", sku: "3ACRBM26N-43SAL", name: "Beige Basic quilting B mini cross bag \u00b7 on the stand", box: [17.9,  5.4,  14.6,  18.9], avail: [1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1] },
-        { cat: "Bag", sku: "3ACRBM26N-43BRD", name: "Brown Basic quilting B mini cross bag \u00b7 on the table", box: [24.9,  30.1,  16.1,  17.5], avail: [1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1] },
-        { cat: "Top", sku: "3FTRV0366-10COL", name: "Pink Phillies Women's varsity vintage letter brushed hood zip-up \u00b7 folded", box: [43.8,  27.9,  17,  20.7], avail: [0,  0,  0,  0,  1,  1,  1,  0,  0,  1,  0,  0,  1,  0,  1] },
-        { cat: "Top", sku: "3FTRV0366-07CGD", name: "Charcoal Dodgers Women's varsity vintage letter brushed hood zip-up \u00b7 folded", box: [63.5,  27.9,  17.1,  20.7], avail: [1,  1,  1,  0,  1,  1,  1,  1,  1,  1,  0,  0,  1,  1,  1] },
-        { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY Curve Liner LT \u00b7 front left", box: [33.5,  48.6,  14.6,  16.9], avail: [1,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1] },
-        { cat: "Footwear", sku: "3ASXL106N-50WHS", name: "Cream Curve Liner LT \u00b7 front right", box: [54.5,  49,  14.4,  16.5], avail: [1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1] }
+        { cat: "Headwear", sku: "3ABNB0466-50BKS", name: "Black NY fur meowing earflap beanie \u00b7 left head stand", box: [36.8,  7,  11.5,  27.2] },
+        { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA fur meowing earflap beanie \u00b7 right head stand", box: [51.6,  7,  11.5,  27.2] },
+        { cat: "Bag", sku: "3ACRBM26N-43SAL", name: "Beige Basic quilting B mini cross bag \u00b7 on the stand", box: [17.9,  5.4,  14.6,  18.9] },
+        { cat: "Bag", sku: "3ACRBM26N-43BRD", name: "Brown Basic quilting B mini cross bag \u00b7 on the table", box: [24.9,  30.1,  16.1,  17.5] },
+        { cat: "Top", sku: "3FTRV0366-10COL", name: "Pink Phillies Women's varsity vintage letter brushed hood zip-up \u00b7 folded", box: [43.8,  27.9,  17,  20.7] },
+        { cat: "Top", sku: "3FTRV0366-07CGD", name: "Charcoal Dodgers Women's varsity vintage letter brushed hood zip-up \u00b7 folded", box: [63.5,  27.9,  17.1,  20.7] },
+        { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY Curve Liner LT \u00b7 front left", box: [33.5,  48.6,  14.6,  16.9] },
+        { cat: "Footwear", sku: "3ASXL106N-50WHS", name: "Cream Curve Liner LT \u00b7 front right", box: [54.5,  49,  14.4,  16.5] }
       ]
     },
     {
@@ -1541,11 +1528,11 @@
       stores: ["M02", "M05", "M14", "M17"],
       note: "",
       items: [
-        { cat: "Headwear", sku: "3ABNB0466-50BKS", name: "Black NY fur meowing earflap beanie \u00b7 left head stand", box: [31.7,  5.9,  13.2,  32.6], avail: [1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  0,  1,  1,  0,  1] },
-        { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA fur meowing earflap beanie \u00b7 right head stand", box: [47.1,  5.9,  12.3,  32.6], avail: [1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  0,  1,  1,  0,  1] },
-        { cat: "Bag", sku: "3ACRBM26N-43BRD", name: "Brown Basic quilting B mini cross bag \u00b7 on the table", box: [59.8,  22.4,  16.4,  17.7], avail: [1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1] },
-        { cat: "Bag", sku: "3ACRBM26N-43SAL", name: "Beige Basic quilting B mini cross bag \u00b7 on the stand", box: [75,  6.3,  16.3,  30.8], avail: [1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  0,  1,  1,  1] },
-        { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY Curve Liner LT \u00b7 left", box: [9.3,  24.5,  22.8,  15.6], avail: [1,  0,  0,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1,  1] }
+        { cat: "Headwear", sku: "3ABNB0466-50BKS", name: "Black NY fur meowing earflap beanie \u00b7 left head stand", box: [31.7,  5.9,  13.2,  32.6] },
+        { cat: "Headwear", sku: "3ABNB0466-07CRS", name: "Cream LA fur meowing earflap beanie \u00b7 right head stand", box: [47.1,  5.9,  12.3,  32.6] },
+        { cat: "Bag", sku: "3ACRBM26N-43BRD", name: "Brown Basic quilting B mini cross bag \u00b7 on the table", box: [59.8,  22.4,  16.4,  17.7] },
+        { cat: "Bag", sku: "3ACRBM26N-43SAL", name: "Beige Basic quilting B mini cross bag \u00b7 on the stand", box: [75,  6.3,  16.3,  30.8] },
+        { cat: "Footwear", sku: "3ASXL106N-50BGD", name: "Tan NY Curve Liner LT \u00b7 left", box: [9.3,  24.5,  22.8,  15.6] }
       ]
     }
   ];
@@ -1660,17 +1647,6 @@
       var fig = { role: "DP" };
       var spots = r.items.slice().sort(function (a, b) { return b.box[2] * b.box[3] - a.box[2] * a.box[3]; })
         .map(function (it) { fig.side = it.box[0] + it.box[2] / 2 < 50 ? "right" : "left"; return hotspot(fig, it); }).join("");
-      var desig = function (s) { return r.stores.indexOf(s) !== -1 ? ' class="desig"' : ""; };
-      var avail = '<div class="sku-block"><h3><span class="role-pill">DP</span> Store availability</h3>' +
-        '<p class="sku-note">\u2713 allocated · \u2715 not allocated · highlighted columns = designated stores</p>' +
-        '<div class="avail-wrap"><table class="avail-table"><thead><tr><th class="sku-h">SKU</th>' +
-        DP_STORES.map(function (s) { return "<th" + desig(s) + ">" + esc(s) + "</th>"; }).join("") + "</tr></thead><tbody>" +
-        r.items.map(function (it) {
-          return '<tr><td class="sku-h"><code>' + esc(it.sku) + "</code></td>" + it.avail.map(function (v, i) {
-            var c = (r.stores.indexOf(DP_STORES[i]) !== -1 ? "desig " : "") + (v ? "yes" : "no");
-            return '<td class="' + c + '" aria-label="' + esc(DP_STORES[i] + (v ? " allocated" : " not allocated")) + '">' + (v ? "\u2713" : "\u2715") + "</td>";
-          }).join("") + "</tr>";
-        }).join("") + '</tbody></table></div><p class="avail-foot">Availability per W45 launch allocation.</p></div>';
       var table = '<div class="sku-block"><h3><span class="role-pill">DP</span> ' + esc(r.title) + "</h3>" +
         '<p class="sku-note">By category · SKU first for store follow-up</p>' +
         '<table class="sku-table"><thead><tr><th>Category</th><th class="sku-col">SKU</th><th>Item</th></tr></thead><tbody>' +
@@ -1682,7 +1658,7 @@
         (r.note ? '<p class="dp-mix">' + esc(r.note) + "</p>" : "") +
         '<div class="stage-wrap"><div class="hotspot-stage" style="aspect-ratio:' + r.imageW + " / " + r.imageH + '" aria-label="' + esc(r.title) + ' with SKU hotspots">' +
         '<img src="' + esc(r.image) + '" alt="' + esc(r.alt) + '" width="' + r.imageW + '" height="' + r.imageH + '" loading="lazy" />' + spots + "</div></div>" +
-        '<p class="hint">Hover or focus items to reveal SKU</p>' + table + avail + "</article>");
+        '<p class="hint">Hover or focus items to reveal SKU</p>' + table + "</article>");
       if (images.indexOf(r.image) === -1) images.push(r.image);
     });
 
