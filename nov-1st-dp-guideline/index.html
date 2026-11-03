@@ -886,6 +886,11 @@
       font-size: 0.62rem; font-weight: 700; letter-spacing: 0.06em; color: var(--birdhouse-brown);
       background: var(--modest-white); padding: 2px 6px; border-radius: 999px; margin-left: 4px; vertical-align: 1px; white-space: nowrap;
     }
+    .store-note {
+      margin-top: 12px; font-size: 0.8rem; color: var(--brownish-black); background: var(--modest-white);
+      border-left: 4px solid var(--city-hunter-blue); border-radius: var(--radius-md); padding: 10px 14px;
+    }
+    .store-note a { color: var(--city-hunter-blue); font-weight: 600; margin-left: 4px; }
     @media (max-width: 760px) { .notes-grid { grid-template-columns: 1fr; } }
   </style>
 </head>
@@ -969,7 +974,50 @@
             }
           ]
         },
-        sub:   { status: "soon" },
+        sub: {
+          status: "live",
+          badge: "Locked pair",
+          image: "sub-m10-m18-mc1-mc3-pair.jpg",
+          imageW: 1152, imageH: 864,
+          alt: "Sub mannequin pair for M10 / M18 / MC1: men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
+          figures: [
+            {
+              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
+              items: [
+                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
+                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
+                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
+                { cat: "Headwear", sku: "TBC", name: "Brown NY cuff beanie", note: "SKU to confirm", box: [32.0, 3.3, 7.0, 9.8] },
+                { cat: "Footwear", sku: "TBC", name: "LA court sneakers (cream / blue LA)", note: "Likely 3ASXS016N-07SBL Rookie Liner", box: [25.2, 90.5, 20.2, 7.3] }
+              ],
+              notes: [
+                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
+                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
+                ["SKU TBC", "Beanie and court sneaker SKUs still to confirm · sneaker likely 3ASXS016N-07SBL Rookie Liner"],
+                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
+              ]
+            },
+            {
+              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
+              items: [
+                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
+                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
+                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
+                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
+                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
+                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
+                { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers", box: [60.1, 88.5, 9.5, 9.4] }
+              ],
+              notes: [
+                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
+                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
+                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
+                ["Socks", "Grey plush high socks pulled up to just below the knee"],
+                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
+              ]
+            }
+          ]
+        },
         third: { status: "soon" }
       }
     },
@@ -1020,7 +1068,54 @@
             }
           ]
         },
-        sub:   { status: "soon" },
+        sub: {
+          status: "live",
+          badge: "Locked pair",
+          image: "sub-m10-m18-mc1-mc3-pair.jpg",
+          imageW: 1152, imageH: 864,
+          storeNote: "Store split · M14 uses this set as shown (Base Low German shoes). M11 is identical except the women's shoes are 3ACVSP46N-07CRS Sleek Powder Twill.",
+          storeNoteImage: "sub-m02-m05-m11-pair.jpg",
+          alt: "Sub mannequin pair for M11 / M14 (image shows M14): men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
+          figures: [
+            {
+              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
+              items: [
+                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
+                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
+                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
+                { cat: "Headwear", sku: "TBC", name: "Brown NY cuff beanie", note: "SKU to confirm", box: [32.0, 3.3, 7.0, 9.8] },
+                { cat: "Footwear", sku: "TBC", name: "LA court sneakers (cream / blue LA)", note: "Likely 3ASXS016N-07SBL Rookie Liner", box: [25.2, 90.5, 20.2, 7.3] }
+              ],
+              notes: [
+                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
+                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
+                ["SKU TBC", "Beanie and court sneaker SKUs still to confirm · sneaker likely 3ASXS016N-07SBL Rookie Liner"],
+                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
+              ]
+            },
+            {
+              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
+              items: [
+                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
+                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
+                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
+                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
+                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
+                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
+                { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers (M14) · M11 uses Sleek Powder Twill 3ACVSP46N-07CRS", note: "M14", box: [60.1, 88.5, 9.5, 9.4] },
+                { cat: "Footwear", sku: "3ACVSP46N-07CRS", name: "Sleek Powder Twill sneakers (M11 only, replaces Base Low German)", note: "M11", noSpot: true, box: [60.1, 88.5, 9.5, 9.4] }
+              ],
+              notes: [
+                ["Store split", "M14 wears 3ACVBG16N-07BLS Base Low German · M11 swaps to 3ACVSP46N-07CRS Sleek Powder Twill; everything else identical"],
+                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
+                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
+                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
+                ["Socks", "Grey plush high socks pulled up to just below the knee"],
+                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
+              ]
+            }
+          ]
+        },
         third: { status: "soon" }
       }
     },
@@ -1071,7 +1166,50 @@
             }
           ]
         },
-        sub:   { status: "soon" },
+        sub: {
+          status: "live",
+          badge: "Locked pair",
+          image: "sub-m10-m18-mc1-mc3-pair.jpg",
+          imageW: 1152, imageH: 864,
+          alt: "Sub mannequin pair for M01: men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
+          figures: [
+            {
+              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
+              items: [
+                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
+                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
+                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
+                { cat: "Headwear", sku: "TBC", name: "Brown NY cuff beanie", note: "SKU to confirm", box: [32.0, 3.3, 7.0, 9.8] },
+                { cat: "Footwear", sku: "TBC", name: "LA court sneakers (cream / blue LA)", note: "Likely 3ASXS016N-07SBL Rookie Liner", box: [25.2, 90.5, 20.2, 7.3] }
+              ],
+              notes: [
+                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
+                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
+                ["SKU TBC", "Beanie and court sneaker SKUs still to confirm · sneaker likely 3ASXS016N-07SBL Rookie Liner"],
+                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
+              ]
+            },
+            {
+              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
+              items: [
+                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
+                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
+                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
+                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
+                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
+                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
+                { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers", box: [60.1, 88.5, 9.5, 9.4] }
+              ],
+              notes: [
+                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
+                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
+                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
+                ["Socks", "Grey plush high socks pulled up to just below the knee"],
+                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
+              ]
+            }
+          ]
+        },
         third: { status: "soon" }
       }
     },
@@ -1124,7 +1262,50 @@
             }
           ]
         },
-        sub:   { status: "soon" },
+        sub: {
+          status: "live",
+          badge: "Locked pair",
+          image: "sub-m02-m05-m11-pair.jpg",
+          imageW: 1152, imageH: 864,
+          alt: "Sub mannequin pair for M02 / M05: men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and sleek Powder Twill sneakers",
+          figures: [
+            {
+              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
+              items: [
+                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
+                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
+                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
+                { cat: "Headwear", sku: "TBC", name: "Brown NY cuff beanie", note: "SKU to confirm", box: [32.0, 3.3, 7.0, 9.8] },
+                { cat: "Footwear", sku: "TBC", name: "LA court sneakers (cream / blue LA)", note: "Likely 3ASXS016N-07SBL Rookie Liner", box: [25.2, 90.5, 20.2, 7.3] }
+              ],
+              notes: [
+                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
+                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
+                ["SKU TBC", "Beanie and court sneaker SKUs still to confirm · sneaker likely 3ASXS016N-07SBL Rookie Liner"],
+                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
+              ]
+            },
+            {
+              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
+              items: [
+                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
+                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
+                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
+                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
+                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
+                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
+                { cat: "Footwear", sku: "3ACVSP46N-07CRS", name: "Sleek Powder Twill sneakers", box: [60.1, 88.5, 9.5, 9.4] }
+              ],
+              notes: [
+                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
+                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
+                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
+                ["Socks", "Grey plush high socks pulled up to just below the knee"],
+                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Sleek Powder Twill sneakers"]
+              ]
+            }
+          ]
+        },
         third: { status: "soon" }
       }
     },
@@ -1435,7 +1616,50 @@
             }
           ]
         },
-        sub:   { status: "soon" },
+        sub: {
+          status: "live",
+          badge: "Locked pair",
+          image: "sub-m10-m18-mc1-mc3-pair.jpg",
+          imageW: 1152, imageH: 864,
+          alt: "Sub mannequin pair for MC3: men left in denim NY varsity jacket with brown leather sleeves over a cream hoodie, navy wide sweatpants, brown NY cuff beanie and cream LA court sneakers; women right in cream fur-hood bomber over a black off-shoulder top, beige cargo mini skirt, grey Ribbon Meowing beanie, blue Candy Boa mini cross bag, grey plush high socks and base Low German sneakers",
+          figures: [
+            {
+              role: "Men", pill: "M", side: "left", where: "left", height: "~183cm",
+              items: [
+                { cat: "Outer",    sku: "3ADKV0164-50INS", name: "Denim NY varsity jacket with brown leather sleeves", box: [23.0, 18.2, 25.2, 33.9] },
+                { cat: "Top",      sku: "3AHDB0964-50CRS", name: "Cream hoodie (inner, hood out)", box: [30.5, 14.1, 9.6, 36.5] },
+                { cat: "Bottom",   sku: "3APTB0764-50BKS", name: "Navy wide sweatpants", box: [25.6, 50.8, 20.3, 40.5] },
+                { cat: "Headwear", sku: "TBC", name: "Brown NY cuff beanie", note: "SKU to confirm", box: [32.0, 3.3, 7.0, 9.8] },
+                { cat: "Footwear", sku: "TBC", name: "LA court sneakers (cream / blue LA)", note: "Likely 3ASXS016N-07SBL Rookie Liner", box: [25.2, 90.5, 20.2, 7.3] }
+              ],
+              notes: [
+                ["Jacket", "Denim NY varsity worn open so the cream hoodie shows down the front, hood pulled out over the collar"],
+                ["Beanie", "Brown NY cuff beanie worn with the cuff folded, NY logo centred at the front"],
+                ["SKU TBC", "Beanie and court sneaker SKUs still to confirm · sneaker likely 3ASXS016N-07SBL Rookie Liner"],
+                ["Fit", "Mannequin ~183cm · navy wide sweatpants full length, covering ~1/3 of the sneakers"]
+              ]
+            },
+            {
+              role: "Women", pill: "W", side: "right", where: "right", height: "~173cm",
+              items: [
+                { cat: "Outer",    sku: "3FJPB0566-43BGL", name: "Cream fur-hood bomber", box: [54.0, 20.4, 22.4, 33.0] },
+                { cat: "Top",      sku: "3FTSB2364-07BKS", name: "Black off-shoulder top", box: [61.7, 24.5, 8.0, 14.6] },
+                { cat: "Bottom",   sku: "3FSKB0264-43BGD", name: "Beige cargo mini skirt", box: [58.2, 41.4, 13.6, 18.8] },
+                { cat: "Headwear", sku: "3ABNB0866-07GRP", name: "Grey Ribbon Meowing beanie", box: [59.8, 7.6, 10.4, 11.3] },
+                { cat: "Bag",      sku: "3ACRBB16N-07LBL", name: "Blue Candy Boa mini cross bag", box: [69.8, 54.7, 6.9, 12.0] },
+                { cat: "Socks",    sku: "3ASOHF166-43MGS", name: "Grey plush high socks", box: [60.3, 74.5, 9.3, 14.0] },
+                { cat: "Footwear", sku: "3ACVBG16N-07BLS", name: "Base Low German sneakers", box: [60.1, 88.5, 9.5, 9.4] }
+              ],
+              notes: [
+                ["Layering", "Fur-hood bomber worn open so the black off-shoulder top and bare midriff show"],
+                ["Beanie", "Grey Ribbon Meowing beanie with the ribbon bows tied at both ears"],
+                ["Bag", "Blue Candy Boa mini cross bag hand-carried in the outer (right) hand"],
+                ["Socks", "Grey plush high socks pulled up to just below the knee"],
+                ["Fit", "Mannequin ~173cm · cargo mini skirt sits on the hip over Base Low German sneakers"]
+              ]
+            }
+          ]
+        },
         third: { status: "soon" }
       }
     }
@@ -1480,7 +1704,9 @@
     }
 
     function livePanel(g, slot, m) {
-      var spots = m.figures.map(function (f) { return hotspotOrder(f).map(function (it) { return hotspot(f, it); }).join(""); }).join("");
+      var storeNote = m.storeNote ? '<p class="store-note">' + esc(m.storeNote) +
+        (m.storeNoteImage ? ' <a href="' + esc(m.storeNoteImage) + '" target="_blank" rel="noopener">View M11 shoe variant image</a>' : "") + "</p>" : "";
+      var spots = m.figures.map(function (f) { return hotspotOrder(f).filter(function (it) { return !it.noSpot; }).map(function (it) { return hotspot(f, it); }).join(""); }).join("");
       var tables = m.figures.map(function (f) {
         return '<div class="sku-block"><h3><span class="role-pill' + (f.pill === "M" ? " m" : "") + '">' + f.pill + "</span> " +
           esc(f.role) + " · " + esc(f.where) + (f.height ? " · " + esc(f.height) : "") + "</h3>" +
@@ -1498,7 +1724,7 @@
       return '<div class="panel-head"><h2>' + slot.title + '</h2><span class="panel-badge live">' + esc(m.badge || "Live") + "</span></div>" +
         '<div class="panel-body"><div class="stage-wrap"><div class="hotspot-stage" style="aspect-ratio:' + m.imageW + " / " + m.imageH + '" aria-label="' + esc(g.label + " " + slot.title) + ' with SKU hotspots">' +
         '<img src="' + esc(m.image) + '" alt="' + esc(m.alt) + '" width="' + m.imageW + '" height="' + m.imageH + '" />' +
-        spots + '</div></div><p class="hint">Hover or focus apparel to reveal SKU</p>' + notes + tables + "</div>";
+        spots + '</div></div><p class="hint">Hover or focus apparel to reveal SKU</p>' + storeNote + notes + tables + "</div>";
     }
 
     function soonPanel(g, slot) {
