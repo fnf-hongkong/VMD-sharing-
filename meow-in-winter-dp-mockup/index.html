@@ -395,5 +395,43 @@ footer{
   </footer>
 
 </div>
+<style>
+#lb{position:fixed;inset:0;background:rgba(20,14,18,.92);display:none;z-index:9999;overflow:hidden;touch-action:none}
+#lb.on{display:block}
+#lb img{position:absolute;left:50%;top:50%;max-width:92vw;max-height:88vh;transform-origin:center;cursor:grab;user-select:none;-webkit-user-drag:none;box-shadow:0 8px 40px rgba(0,0,0,.5)}
+#lb img.drag{cursor:grabbing}
+#lb .bar{position:absolute;top:12px;right:14px;display:flex;gap:8px;z-index:2}
+#lb button{background:rgba(255,255,255,.14);color:#fff;border:1px solid rgba(255,255,255,.3);border-radius:20px;min-width:38px;height:38px;font:600 16px system-ui,sans-serif;cursor:pointer;padding:0 12px}
+#lb button:hover{background:rgba(255,255,255,.28)}
+#lb .cap{position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#eee;font:13px system-ui,sans-serif;pointer-events:none;padding:0 20px}
+</style>
+<div id="lb" role="dialog" aria-label="Image viewer">
+  <div class="bar"><button data-z="-1" title="Zoom out">&minus;</button><button data-z="0" title="Reset">1:1</button><button data-z="1" title="Zoom in">+</button><button data-x title="Close">&times;</button></div>
+  <img alt="">
+  <div class="cap"></div>
+</div>
+<script>
+(function(){
+var lb=document.getElementById('lb'),im=lb.querySelector('img'),cap=lb.querySelector('.cap');
+var s=1,x=0,y=0,drag=null,pts={},pinch=null;
+function ap(){im.style.transform='translate(calc(-50% + '+x+'px),calc(-50% + '+y+'px)) scale('+s+')';}
+function zoom(f,cx,cy){var ns=Math.min(8,Math.max(1,s*f));if(cx!=null){var r=lb.getBoundingClientRect(),ox=cx-r.width/2-x,oy=cy-r.height/2-y;x-=ox*(ns/s-1);y-=oy*(ns/s-1);}s=ns;if(s===1){x=0;y=0;}ap();}
+function open(src,alt){im.src=src;cap.textContent=alt||'';s=1;x=0;y=0;ap();lb.classList.add('on');document.body.style.overflow='hidden';}
+function close(){lb.classList.remove('on');document.body.style.overflow='';}
+document.querySelectorAll('img').forEach(function(i){if(lb.contains(i))return;function ok(){return i.getBoundingClientRect().width>=160;}function mark(){i.style.cursor=ok()?'zoom-in':'';}if(i.complete)mark();else i.addEventListener('load',mark);window.addEventListener('resize',mark);i.addEventListener('click',function(e){if(!ok())return;e.preventDefault();open(i.currentSrc||i.src,i.alt);});});
+lb.addEventListener('click',function(e){if(e.target===lb)close();});
+lb.querySelector('[data-x]').onclick=close;
+lb.querySelectorAll('[data-z]').forEach(function(b){b.onclick=function(){var z=+b.dataset.z;if(z===0){s=1;x=0;y=0;ap();}else zoom(z>0?1.5:1/1.5);};});
+document.addEventListener('keydown',function(e){if(!lb.classList.contains('on'))return;if(e.key==='Escape')close();if(e.key==='+'||e.key==='=')zoom(1.5);if(e.key==='-')zoom(1/1.5);});
+lb.addEventListener('wheel',function(e){e.preventDefault();zoom(e.deltaY<0?1.2:1/1.2,e.clientX,e.clientY);},{passive:false});
+im.addEventListener('dblclick',function(e){if(s>1){s=1;x=0;y=0;ap();}else zoom(2.5,e.clientX,e.clientY);});
+im.addEventListener('pointerdown',function(e){im.setPointerCapture(e.pointerId);pts[e.pointerId]={x:e.clientX,y:e.clientY};var k=Object.keys(pts);if(k.length===2){var a=pts[k[0]],b=pts[k[1]];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),s:s};drag=null;}else{drag={x:e.clientX-x,y:e.clientY-y};im.classList.add('drag');}});
+im.addEventListener('pointermove',function(e){if(!pts[e.pointerId])return;pts[e.pointerId]={x:e.clientX,y:e.clientY};var k=Object.keys(pts);if(pinch&&k.length===2){var a=pts[k[0]],b=pts[k[1]];s=Math.min(8,Math.max(1,pinch.s*Math.hypot(a.x-b.x,a.y-b.y)/pinch.d));if(s===1){x=0;y=0;}ap();}else if(drag&&s>1){x=e.clientX-drag.x;y=e.clientY-drag.y;ap();}});
+function up(e){delete pts[e.pointerId];if(Object.keys(pts).length<2)pinch=null;drag=null;im.classList.remove('drag');}
+im.addEventListener('pointerup',up);im.addEventListener('pointercancel',up);
+im.ondragstart=function(){return false;};
+})();
+</script>
+
 </body>
 </html>
