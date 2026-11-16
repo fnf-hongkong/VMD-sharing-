@@ -4,6 +4,21 @@ Visual merchandising deliverables shared for reference/review.
 Open any file directly in a browser — each one is fully self-contained
 (no assets to download, works offline), or view it live via GitHub Pages.
 
+## VMD Weekly Report — floor before/after by store
+
+| File | Live |
+|---|---|
+| `vmd-weekly-report/index.html` | [view](https://fnf-hongkong.github.io/VMD-sharing-/vmd-weekly-report/) |
+
+The rolling weekly report. Pick a week and a brand, then a store down the left.
+Each store opens on its floor plan — numbered dots with a "what is where" list
+naming the theme on every fixture — followed by the before/after photos zone by
+zone. Clicking a line on the plan jumps to that zone. W46 covers M01 Hollywood
+Plaza, M02 Time Square, M10 Isquare and M11 APM.
+
+Unlike the other files here this one is a folder rather than a single page: the
+photos sit beside index.html.
+
 ## Karina FW26 — pre-launch dashboard (all 13 stores)
 
 | File | Live |
