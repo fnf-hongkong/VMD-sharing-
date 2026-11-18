@@ -19,6 +19,24 @@ Plaza, M02 Time Square, M10 Isquare and M11 APM.
 Unlike the other files here this one is a folder rather than a single page: the
 photos sit beside index.html.
 
+## Meow in Winter — store display guideline (EN + 繁體中文)
+
+| File | Live |
+|---|---|
+| `meow-in-winter-display-guideline/index.html` | [view](https://fnf-hongkong.github.io/VMD-sharing-/meow-in-winter-display-guideline/) |
+
+What a store does on the floor for the Meow in Winter promotion, in three
+parts. **01 Table Setting** — the hexagon and round VP tables, each with a
+numbered callout on every piece and its style code. **02 Floor Hangers** — the
+rail layout with all nine down jackets (which face out, which hang side-on,
+and which hanger tag goes on each), the nine tags themselves, and photographs
+of the real cord showing how the knot is tied. **03 Entrance POP** — the
+promotion artwork and where it goes. A pre-opening checklist closes the page.
+
+Every line is written twice, English then Traditional Chinese; style codes and
+product names stay in English. Self-contained like the rest — one file, no
+assets to fetch.
+
 ## Karina FW26 — pre-launch dashboard (all 13 stores)
 
 | File | Live |
